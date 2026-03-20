@@ -1,7 +1,8 @@
 """Booking routes: create, list, update, guest lookup, payments"""
-import uuid, json, secrets, hashlib
+import uuid, json, secrets, hashlib, io, csv
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from ..database import get_db
 from ..emails import send_booking_confirmation, send_approval_with_payment_link, send_rejection, send_payment_receipt
 from ..routes.invoices import create_invoice_for_booking
@@ -121,6 +122,43 @@ async def create_booking(req: Request):
     ).fetchone()
     conn.close()
     return dict(bk)
+
+
+@router.get("/bookings/export")
+async def export_bookings(date_from: str = None, date_to: str = None, status: str = None):
+    """Export bookings as CSV."""
+    conn = get_db()
+    q = """SELECT b.ref, f.name as facility, b.title, b.guest_name, b.guest_email,
+           b.booking_date, b.start_time, b.end_time, b.attendees,
+           b.status, b.pay_status, b.total, b.discount_amt, b.final_amount,
+           b.pay_method, b.created_at
+           FROM bookings b JOIN facilities f ON b.facility_id=f.id"""
+    w, p = [], []
+    if date_from: w.append("b.booking_date>=?"); p.append(date_from)
+    if date_to: w.append("b.booking_date<=?"); p.append(date_to)
+    if status: w.append("b.status=?"); p.append(status)
+    if w: q += " WHERE " + " AND ".join(w)
+    q += " ORDER BY b.booking_date DESC"
+    rows = conn.execute(q, p).fetchall()
+    conn.close()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["Reference", "Facility", "Title", "Guest Name", "Email",
+                     "Date", "Start", "End", "Attendees", "Status", "Payment",
+                     "Subtotal", "Discount", "Total", "Pay Method", "Created"])
+    for r in rows:
+        writer.writerow([r["ref"], r["facility"], r["title"], r["guest_name"],
+                        r["guest_email"], r["booking_date"], r["start_time"],
+                        r["end_time"], r["attendees"], r["status"], r["pay_status"],
+                        r["total"], r["discount_amt"], r["final_amount"],
+                        r["pay_method"], r["created_at"]])
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=rcees_bookings.csv"}
+    )
 
 
 @router.get("/bookings")

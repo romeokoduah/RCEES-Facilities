@@ -107,6 +107,52 @@ async def generate_invoice(req: Request):
     return inv
 
 
+@router.post("/manual")
+async def create_manual_invoice(req: Request):
+    """Create a manual invoice not tied to an existing booking."""
+    d = await req.json()
+    inv_no = _receipt_no() if d.get("type") == "receipt" else _inv_no()
+    iid = str(uuid.uuid4())
+    lines = d.get("line_items", [])
+    subtotal = sum(l.get("amount", 0) for l in lines)
+    discount = d.get("discount", 0)
+    tax = round(subtotal * TAX_RATE, 2)
+    total = round(subtotal - discount + tax, 2)
+
+    conn = get_db()
+    # Create a placeholder booking for manual invoices
+    bid = str(uuid.uuid4())
+    import secrets
+    bref = f"RCEES-{''.join(secrets.choice('ABCDEFGHJKLMNPQRSTUVWXYZ23456789') for _ in range(5))}"
+    conn.execute(
+        """INSERT INTO bookings (id, ref, facility_id, guest_name, guest_email, guest_phone, guest_org,
+           title, booking_date, start_time, end_time, status, pay_status, total, final_amount, notes)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+        (bid, bref, d.get("facility_id", ""), d.get("name", ""),
+         d.get("email", ""), d.get("phone", ""), d.get("organization", ""),
+         d.get("title", "Manual Entry"), d.get("date", datetime.now().strftime("%Y-%m-%d")),
+         d.get("start_time", "09:00"), d.get("end_time", "10:00"),
+         "confirmed", d.get("pay_status", "unpaid"), total, total,
+         "Manual invoice entry")
+    )
+
+    conn.execute(
+        """INSERT INTO invoices (id, invoice_no, booking_id, invoice_type,
+           issued_to_name, issued_to_email, issued_to_phone, issued_to_org,
+           subtotal, discount, tax, total, currency, line_items, status, notes, terms)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+        (iid, inv_no, bid, d.get("type", "invoice"),
+         d.get("name", ""), d.get("email", ""), d.get("phone", ""), d.get("organization", ""),
+         subtotal, discount, tax, total, "GHS", json.dumps(lines),
+         d.get("pay_status", "unpaid"),
+         d.get("notes", ""), d.get("terms", "Payment is due upon receipt."))
+    )
+    conn.commit()
+    inv = conn.execute("SELECT * FROM invoices WHERE id=?", (iid,)).fetchone()
+    conn.close()
+    return dict(inv)
+
+
 @router.get("/{iid}/html", response_class=HTMLResponse)
 async def invoice_html(iid: str):
     """Render a printable HTML invoice/receipt."""

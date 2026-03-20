@@ -115,6 +115,33 @@ CREATE INDEX IF NOT EXISTS ix_bk_ref ON bookings(ref);
 CREATE INDEX IF NOT EXISTS ix_bk_token ON bookings(payment_token);
 CREATE INDEX IF NOT EXISTS ix_inv_bk ON invoices(booking_id);
 CREATE INDEX IF NOT EXISTS ix_mt_fac ON maintenance(facility_id);
+
+CREATE TABLE IF NOT EXISTS availability_rules (
+    id TEXT PRIMARY KEY,
+    facility_id TEXT REFERENCES facilities(id),
+    rule_type TEXT NOT NULL,
+    date TEXT,
+    day_of_week INTEGER,
+    start_time TEXT DEFAULT '00:00',
+    end_time TEXT DEFAULT '23:59',
+    is_available INTEGER DEFAULT 0,
+    reason TEXT DEFAULT '',
+    created_by TEXT DEFAULT '',
+    created_at TEXT DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS ix_avail_fac ON availability_rules(facility_id);
+CREATE INDEX IF NOT EXISTS ix_avail_date ON availability_rules(date);
+
+CREATE TABLE IF NOT EXISTS activity_log (
+    id TEXT PRIMARY KEY,
+    action TEXT NOT NULL,
+    entity_type TEXT DEFAULT '',
+    entity_id TEXT DEFAULT '',
+    user_id TEXT DEFAULT '',
+    user_name TEXT DEFAULT '',
+    details TEXT DEFAULT '',
+    created_at TEXT DEFAULT (datetime('now'))
+);
 """
 
 CATEGORIES = [

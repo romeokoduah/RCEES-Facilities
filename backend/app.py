@@ -11,6 +11,8 @@ from .routes.maintenance import router as maintenance_router
 from .routes.discounts import router as discounts_router
 from .routes.invoices import router as invoices_router
 from .routes.misc import equipment_router, users_router, reviews_router, analytics_router
+from .routes.availability import router as availability_router
+from .routes.activity import router as activity_router
 
 def create_app() -> FastAPI:
     app = FastAPI(title="RCEES Facilities Management System", version="3.5.0")
@@ -27,6 +29,8 @@ def create_app() -> FastAPI:
     app.include_router(users_router)
     app.include_router(reviews_router)
     app.include_router(analytics_router)
+    app.include_router(availability_router)
+    app.include_router(activity_router)
 
     @app.get("/", response_class=HTMLResponse)
     async def serve_frontend():

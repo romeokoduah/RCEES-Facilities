@@ -1,269 +1,1766 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RCEES Facilities · UENR</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<title>RCEES Facilities - UENR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f4f6fa;--bg2:#eaecf2;--card:#fff;--card2:#f8f9fc;
-  --ink:#111827;--ink2:#4b5563;--ink3:#6b7280;--ink4:#9ca3af;
-  --pri:#1e40af;--pri2:#2563eb;--priP:#dbeafe;--priD:#1e3a8a;
-  --ok:#047857;--okP:#d1fae5;
-  --warn:#b45309;--warnP:#fef3c7;
-  --err:#b91c1c;--errP:#fee2e2;
-  --brd:#e5e7eb;--brd2:#d1d5db;
-  --sh1:0 1px 2px rgba(0,0,0,.05);--sh2:0 4px 12px rgba(0,0,0,.07);--sh3:0 12px 32px rgba(0,0,0,.1);
+  --pri:#4f46e5;--pri-h:#4338ca;--pri-l:#818cf8;--pri-ll:#c7d2fe;--pri-bg:#eef2ff;
+  --ok:#059669;--ok-bg:#d1fae5;--ok-tx:#065f46;
+  --warn:#d97706;--warn-bg:#fef3c7;--warn-tx:#92400e;
+  --err:#dc2626;--err-bg:#fee2e2;--err-tx:#991b1b;
+  --bg:#f8fafc;--bg2:#f1f5f9;--card:#ffffff;
+  --ink:#0f172a;--ink2:#475569;--ink3:#64748b;--ink4:#94a3b8;
+  --brd:#e2e8f0;--brd2:#d1d5db;
+  --side:#0f0d23;--side2:#1a1640;
+  --sh1:0 1px 3px rgba(0,0,0,0.08);--sh2:0 4px 16px rgba(0,0,0,0.1);--sh3:0 20px 50px rgba(0,0,0,0.15);
   --r1:8px;--r2:12px;--r3:16px;
-  --fh:'Playfair Display',Georgia,serif;--fb:'Plus Jakarta Sans',-apple-system,sans-serif;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 }
-body{font-family:var(--fb);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;font-size:14px}
-h1,h2,h3{font-family:var(--fh);font-weight:600;line-height:1.2}
-button{cursor:pointer;font-family:var(--fb);border:none;font-size:13px}
-input,select,textarea{font-family:var(--fb);font-size:13.5px}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;font-size:14px}
+h1,h2,h3,h4{font-family:var(--font);font-weight:700;line-height:1.25}
+button{cursor:pointer;font-family:var(--font);border:none;font-size:13px}
+input,select,textarea{font-family:var(--font);font-size:14px}
 a{text-decoration:none;color:inherit}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--brd2);border-radius:4px}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--brd2);border-radius:4px}
 
+/* Layout */
 .app{display:flex;min-height:100vh}
-.side{width:250px;background:#0f172a;color:#cbd5e1;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto}
-.mn{flex:1;margin-left:250px}
-.top{height:56px;background:rgba(244,246,250,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 24px;gap:12px;position:sticky;top:0;z-index:50}
-.top h1{font-size:16px;font-family:var(--fb);font-weight:700}.top .sp{flex:1}
-.pg{padding:24px;max-width:1400px}
+.side{width:260px;background:linear-gradient(180deg,var(--side) 0%,var(--side2) 100%);color:#cbd5e1;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;overflow-y:auto;transition:transform 0.3s ease}
+.mn{flex:1;margin-left:260px;transition:margin-left 0.3s ease}
+.top{height:60px;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 28px;gap:14px;position:sticky;top:0;z-index:50}
+.top h1{font-size:16px;font-weight:600;color:var(--ink)}.top .sp{flex:1}
+.pg{padding:28px;max-width:1400px}
 
-.s-hd{padding:18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:10px}
-.s-ic{width:38px;height:38px;background:var(--pri);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-family:var(--fh);font-size:16px}
-.s-hd h2{font-size:14px;font-weight:700;font-family:var(--fb);color:#f1f5f9}.s-hd small{font-size:9px;opacity:.35;display:block;letter-spacing:.5px;text-transform:uppercase}
-.s-nav{flex:1;padding:12px 8px}
-.s-lb{font-size:9px;text-transform:uppercase;letter-spacing:2px;opacity:.25;padding:0 12px;margin:18px 0 6px;font-weight:700}
-.s-i{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:var(--r1);font-size:13px;color:rgba(255,255,255,.4);cursor:pointer;transition:all .15s;margin-bottom:1px}
+/* Sidebar */
+.s-hd{padding:22px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px}
+.s-ic{width:40px;height:40px;background:var(--pri);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:17px}
+.s-hd h2{font-size:15px;font-weight:700;color:#f1f5f9}.s-hd small{font-size:10px;opacity:.35;display:block;letter-spacing:1px;text-transform:uppercase;margin-top:1px}
+.s-nav{flex:1;padding:14px 10px}
+.s-lb{font-size:10px;text-transform:uppercase;letter-spacing:2px;opacity:.25;padding:0 14px;margin:20px 0 8px;font-weight:700}
+.s-i{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:var(--r1);font-size:13px;font-weight:500;color:rgba(255,255,255,.45);cursor:pointer;transition:all 0.2s ease;margin-bottom:2px;position:relative}
 .s-i:hover{background:rgba(255,255,255,.06);color:#e2e8f0}
-.s-i.on{background:rgba(30,64,175,.5);color:#93c5fd;font-weight:600}
-.s-i .ic{width:18px;text-align:center;font-size:14px}
-.s-i .bdg{margin-left:auto;background:#f59e0b;color:#000;font-size:9px;padding:1px 7px;border-radius:8px;font-weight:700}
-.s-ft{padding:10px 8px;border-top:1px solid rgba(255,255,255,.06)}
+.s-i.on{background:rgba(79,70,229,.35);color:#c7d2fe;font-weight:600}
+.s-i.on::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--pri-l)}
+.s-i .ic{width:20px;text-align:center;font-size:15px;flex-shrink:0}
+.s-i .bdg{margin-left:auto;background:#f59e0b;color:#000;font-size:9px;padding:2px 8px;border-radius:10px;font-weight:700}
+.s-ft{padding:12px 10px;border-top:1px solid rgba(255,255,255,.06)}
 
-.crd{background:var(--card);border:1px solid var(--brd);border-radius:var(--r2);padding:20px;box-shadow:var(--sh1)}
+/* Cards */
+.crd{background:var(--card);border:1px solid var(--brd);border-radius:var(--r2);padding:22px;box-shadow:var(--sh1);transition:box-shadow 0.2s ease}
 .crd:hover{box-shadow:var(--sh2)}
-.crd-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.crd-h h3{font-size:15px;font-family:var(--fb);font-weight:700}
+.crd-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.crd-h h3{font-size:15px;font-weight:700}
 
-.g{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+/* Grid */
+.g{display:grid;gap:16px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
 @media(max-width:1100px){.g4,.g3{grid-template-columns:1fr 1fr}}@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr}}
 
-.st{background:var(--card);border:1px solid var(--brd);border-radius:var(--r2);padding:16px;position:relative;overflow:hidden}
-.st::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--pri)}
+/* Stats */
+.st{background:var(--card);border:1px solid var(--brd);border-radius:var(--r2);padding:18px 20px;position:relative;overflow:hidden;transition:box-shadow 0.2s}
+.st:hover{box-shadow:var(--sh2)}
+.st::before{content:"";position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--pri)}
 .st.sg::before{background:var(--ok)}.st.sr::before{background:var(--err)}.st.sw::before{background:var(--warn)}
-.st-l{font-size:10.5px;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;font-weight:700;margin-bottom:2px}
-.st-v{font-family:var(--fh);font-size:26px;font-weight:700}
+.st-l{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:4px}
+.st-v{font-size:28px;font-weight:700;color:var(--ink)}
+.st-icon{position:absolute;top:16px;right:16px;font-size:22px;opacity:.6}
 
-.bt{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:var(--r1);font-weight:600;transition:all .15s;border:1px solid transparent}
-.bt-p{background:var(--pri);color:#fff}.bt-p:hover{background:var(--pri2)}
-.bt-s{background:var(--bg2);color:var(--ink);border-color:var(--brd)}.bt-s:hover{border-color:var(--brd2)}
-.bt-d{background:var(--err);color:#fff}
-.bt-g{background:transparent;color:var(--ink3)}.bt-g:hover{background:var(--bg2)}
-.bt-ok{background:var(--ok);color:#fff}
-.bt-sm{padding:5px 11px;font-size:12px}.bt-lg{padding:12px 24px;font-size:14px}
-.bt:disabled{opacity:.35;cursor:not-allowed}
+/* Buttons */
+.bt{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--r1);font-weight:600;transition:all 0.2s ease;border:1px solid transparent;font-size:13px}
+.bt-p{background:var(--pri);color:#fff}.bt-p:hover{background:var(--pri-h);transform:translateY(-1px)}
+.bt-s{background:#fff;color:var(--pri);border-color:var(--brd)}.bt-s:hover{border-color:var(--pri);background:var(--pri-bg)}
+.bt-d{background:var(--err);color:#fff}.bt-d:hover{background:#b91c1c}
+.bt-g{background:transparent;color:var(--ink3)}.bt-g:hover{background:var(--bg2);color:var(--ink)}
+.bt-ok{background:var(--ok);color:#fff}.bt-ok:hover{background:#047857}
+.bt-sm{padding:6px 12px;font-size:12px;height:28px}.bt-md{padding:8px 16px;font-size:13px;height:36px}.bt-lg{padding:12px 24px;font-size:14px;height:44px}
+.bt:disabled{opacity:.4;cursor:not-allowed;transform:none}
 
-.fg{margin-bottom:14px}
-.fl{display:block;font-size:11px;font-weight:600;color:var(--ink3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.3px}
-.fi{width:100%;padding:9px 12px;border:1px solid var(--brd);border-radius:var(--r1);background:var(--card);transition:all .15s}
-.fi:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px rgba(30,64,175,.1)}
-textarea.fi{min-height:60px;resize:vertical}
+/* Forms */
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--ink3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.fi{width:100%;padding:10px 14px;border:1px solid var(--brd2);border-radius:var(--r1);background:var(--card);transition:all 0.2s;font-size:14px;color:var(--ink)}
+.fi:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+textarea.fi{min-height:70px;resize:vertical}
 
-.tg{display:inline-flex;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.t-ok{background:var(--okP);color:var(--ok)}.t-w{background:var(--warnP);color:var(--warn)}
-.t-err{background:var(--errP);color:var(--err)}.t-p{background:var(--priP);color:var(--pri)}
-.t-n{background:var(--bg2);color:var(--ink3)}
+/* Tags / Badges */
+.tg{display:inline-flex;align-items:center;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:600}
+.t-ok{background:var(--ok-bg);color:var(--ok-tx)}.t-w{background:var(--warn-bg);color:var(--warn-tx)}
+.t-err{background:var(--err-bg);color:var(--err-tx)}.t-p{background:var(--pri-bg);color:var(--pri)}
+.t-n{background:var(--bg2);color:var(--ink2)}
 
+/* Table */
 .tw{overflow-x:auto;border-radius:var(--r1)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:9px 12px;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.7px;border-bottom:2px solid var(--brd);background:var(--card2)}
-td{padding:10px 12px;border-bottom:1px solid var(--brd)}
-tr:hover td{background:var(--card2)}
+th{text-align:left;padding:10px 14px;font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.8px;background:var(--bg);border-bottom:1px solid var(--brd)}
+td{padding:11px 14px;border-bottom:1px solid var(--brd)}
+tr:hover td{background:var(--bg)}
 
-.mo-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
-.mo{background:var(--card);border-radius:var(--r3);max-width:620px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--sh3)}
-.mo-h{padding:16px 20px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
-.mo-h h3{font-size:16px;font-family:var(--fb);font-weight:700}
-.mo-b{padding:20px}.mo-f{padding:12px 20px;border-top:1px solid var(--brd);display:flex;justify-content:flex-end;gap:8px}
+/* Modal */
+.mo-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;animation:fadeIn 0.2s ease}
+.mo{background:var(--card);border-radius:var(--r3);max-width:620px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:var(--sh3);animation:modalIn 0.25s ease}
+.mo-h{padding:18px 24px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between}
+.mo-h h3{font-size:17px;font-weight:700}
+.mo-b{padding:24px}.mo-f{padding:14px 24px;border-top:1px solid var(--brd);display:flex;justify-content:flex-end;gap:10px}
 
-.fc{background:var(--card);border:1px solid var(--brd);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .2s}
-.fc:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-.fc-im{height:155px;background:linear-gradient(135deg,var(--priP),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:38px;position:relative;background-size:cover;background-position:center}
-.fc-im .fc-ct{position:absolute;top:10px;left:10px;background:rgba(15,23,42,.6);color:#fff;padding:2px 9px;border-radius:14px;font-size:10px;font-weight:600;backdrop-filter:blur(6px)}
-.fc-im .fc-rt{position:absolute;top:10px;right:10px;background:rgba(15,23,42,.6);color:#fbbf24;padding:2px 9px;border-radius:14px;font-size:10px;backdrop-filter:blur(6px)}
-.fc-bd{padding:14px}.fc-nm{font-size:15px;font-weight:700;margin-bottom:2px}
-.fc-ds{font-size:11.5px;color:var(--ink3);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.fc-mt{display:flex;gap:10px;font-size:11.5px;color:var(--ink3)}
-.fc-pr{margin-top:10px;font-size:18px;font-weight:700;color:var(--pri);font-family:var(--fh)}
-.fc-pr small{font-size:11px;font-weight:400;color:var(--ink4);font-family:var(--fb)}
+/* Facility cards */
+.fc{background:var(--card);border:1px solid var(--brd);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all 0.25s ease}
+.fc:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.fc-im{height:165px;background:linear-gradient(135deg,var(--pri-bg),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:40px;position:relative;background-size:cover;background-position:center}
+.fc-im .fc-ct{position:absolute;top:12px;left:12px;background:rgba(15,13,35,.7);color:#fff;padding:3px 10px;border-radius:14px;font-size:10px;font-weight:600;backdrop-filter:blur(8px)}
+.fc-im .fc-rt{position:absolute;top:12px;right:12px;background:rgba(15,13,35,.7);color:#fbbf24;padding:3px 10px;border-radius:14px;font-size:10px;backdrop-filter:blur(8px)}
+.fc-bd{padding:16px}.fc-nm{font-size:15px;font-weight:700;margin-bottom:3px;color:var(--ink)}
+.fc-ds{font-size:12px;color:var(--ink3);margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.fc-mt{display:flex;gap:12px;font-size:12px;color:var(--ink3)}
+.fc-pr{margin-top:12px;font-size:20px;font-weight:700;color:var(--pri)}
+.fc-pr small{font-size:12px;font-weight:400;color:var(--ink4)}
 
-.sl-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:4px}
-.sl{padding:7px;border-radius:var(--r1);text-align:center;font-size:12px;font-weight:600;border:1px solid var(--brd);cursor:pointer;transition:all .12s}
-.sl.av{background:var(--priP);border-color:rgba(30,64,175,.15);color:var(--pri)}.sl.av:hover{background:var(--pri);color:#fff}
+/* Slots */
+.sl-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:5px}
+.sl{padding:8px;border-radius:var(--r1);text-align:center;font-size:12px;font-weight:600;border:1px solid var(--brd);cursor:pointer;transition:all 0.15s}
+.sl.av{background:var(--pri-bg);border-color:rgba(79,70,229,.15);color:var(--pri)}.sl.av:hover{background:var(--pri);color:#fff;border-color:var(--pri)}
 .sl.bk{background:var(--bg2);color:var(--ink4);cursor:not-allowed;text-decoration:line-through}
 .sl.sel{background:var(--pri);color:#fff;border-color:var(--pri)}
-.sl.mnt{background:var(--warnP);color:var(--warn);cursor:not-allowed}
+.sl.mnt{background:var(--warn-bg);color:var(--warn);cursor:not-allowed}
+.sl.blkd{background:var(--err-bg);color:var(--err-tx);cursor:not-allowed;border-color:rgba(220,38,38,.15)}
 
-.cl-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.cl-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
-.cl-dh{font-size:9px;color:var(--ink4);font-weight:700;padding:4px;text-transform:uppercase}
-.cl-d{padding:6px 2px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .12s;font-weight:500}
-.cl-d:hover{background:var(--priP)}.cl-d.tod{background:var(--pri);color:#fff;font-weight:700}
-.cl-d.csel{background:var(--pri2);color:#fff}.cl-d.emp{visibility:hidden}.cl-d.past{opacity:.25;cursor:default}
+/* Calendar */
+.cl-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cl-g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.cl-dh{font-size:10px;color:var(--ink4);font-weight:700;padding:6px;text-transform:uppercase}
+.cl-d{padding:7px 3px;border-radius:8px;font-size:12px;cursor:pointer;transition:all 0.15s;font-weight:500}
+.cl-d:hover{background:var(--pri-bg)}.cl-d.tod{background:var(--pri);color:#fff;font-weight:700}
+.cl-d.csel{background:var(--pri-h);color:#fff}.cl-d.emp{visibility:hidden}.cl-d.past{opacity:.25;cursor:default}
+.cl-d.blocked-date{background:var(--err-bg);color:var(--err-tx);font-weight:600}
 
-.pb{border:2px solid var(--pri);border-radius:var(--r2);padding:18px}
-.pln{display:flex;justify-content:space-between;margin-bottom:5px;font-size:13px}
-.pln.ptot{font-size:18px;font-weight:700;padding-top:8px;border-top:2px solid var(--brd);margin-top:6px;font-family:var(--fh)}
-.pm-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
-.pm{border:2px solid var(--brd);border-radius:var(--r2);padding:12px;text-align:center;cursor:pointer;transition:all .12s;font-size:12px;font-weight:600}
-.pm:hover{border-color:var(--pri2)}.pm.psel{border-color:var(--pri);background:var(--priP)}
-.pm-ic{font-size:18px;margin-bottom:2px}
+/* Price box */
+.pb{border:2px solid var(--pri-ll);border-radius:var(--r2);padding:20px;background:var(--pri-bg)}
+.pln{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
+.pln.ptot{font-size:20px;font-weight:700;padding-top:10px;border-top:2px solid var(--pri-ll);margin-top:8px}
 
-.ts-c{position:fixed;top:14px;right:14px;z-index:9999;display:flex;flex-direction:column;gap:5px}
-.ts{padding:11px 16px;border-radius:var(--r2);font-size:13px;color:#fff;min-width:240px;box-shadow:var(--sh3);animation:tsIn .25s ease;font-weight:500}
-.ts-ok{background:var(--ok)}.ts-err{background:var(--err)}.ts-inf{background:var(--pri)}
+/* Payment methods */
+.pm-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.pm{border:2px solid var(--brd);border-radius:var(--r2);padding:14px;text-align:center;cursor:pointer;transition:all 0.15s;font-size:12px;font-weight:600}
+.pm:hover{border-color:var(--pri-l)}.pm.psel{border-color:var(--pri);background:var(--pri-bg)}
+.pm-ic{font-size:20px;margin-bottom:4px}
+
+/* Toasts */
+.ts-c{position:fixed;top:16px;right:16px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.ts{padding:13px 18px;border-radius:var(--r2);font-size:13px;color:#fff;min-width:260px;box-shadow:var(--sh3);animation:tsIn 0.3s ease;font-weight:500;border-left:4px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ts-ok{background:var(--ok);border-left-color:#047857}.ts-err{background:var(--err);border-left-color:#991b1b}.ts-inf{background:var(--pri);border-left-color:#3730a3}
+.ts .ts-close{cursor:pointer;opacity:.7;font-size:16px;flex-shrink:0}.ts .ts-close:hover{opacity:1}
 @keyframes tsIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 
-.hero{min-height:88vh;display:flex;align-items:center;justify-content:center;background:#0f172a;color:#fff;text-align:center;padding:60px 20px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(30,64,175,.3),transparent 55%),radial-gradient(ellipse at 70% 30%,rgba(96,165,250,.1),transparent 45%)}
-.hero>div{position:relative;z-index:1;max-width:620px}
-.hero h1{font-size:46px;letter-spacing:-1px;margin-bottom:16px}
-.hero p{font-size:15px;opacity:.6;line-height:1.75;margin-bottom:32px}
-.hero .bt{padding:13px 28px;font-size:14px;border-radius:var(--r2)}
-.hero .bt-w{background:#fff;color:var(--pri)}.hero .bt-o{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:#fff}.hero .bt-o:hover{border-color:rgba(255,255,255,.4)}
+/* Hero */
+.hero{min-height:92vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f0d23 0%,#1e1b4b 40%,#312e81 100%);color:#fff;text-align:center;padding:60px 24px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 25% 40%,rgba(79,70,229,.4),transparent 55%),radial-gradient(ellipse at 75% 30%,rgba(129,140,248,.15),transparent 45%),radial-gradient(circle at 50% 80%,rgba(99,102,241,.1),transparent 40%)}
+.hero::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero>div{position:relative;z-index:1;max-width:660px}
+.hero h1{font-size:48px;letter-spacing:-1.5px;margin-bottom:18px;font-weight:700}
+.hero p{font-size:16px;opacity:.55;line-height:1.8;margin-bottom:36px}
+.hero .bt{padding:14px 32px;font-size:14px;border-radius:var(--r2)}
+.hero .bt-w{background:#fff;color:var(--pri);font-weight:700}.hero .bt-w:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.hero .bt-o{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:#fff}.hero .bt-o:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.05)}
 
-.sec{padding:56px 24px;max-width:1100px;margin:0 auto}
-.sec h2{font-size:30px;text-align:center;margin-bottom:8px}
-.sec .sub{text-align:center;color:var(--ink3);margin-bottom:36px;font-size:13px}
-.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:800px){.feat{grid-template-columns:1fr}.hero h1{font-size:28px}}
-.feat-i{padding:22px;border-radius:var(--r2);border:1px solid var(--brd);background:var(--card)}
-.feat-i .fic{font-size:24px;margin-bottom:8px;display:inline-block;padding:8px;background:var(--priP);border-radius:10px}
-.feat-i h4{font-size:14px;font-family:var(--fb);font-weight:700;margin-bottom:4px}
-.feat-i p{font-size:12px;color:var(--ink3);line-height:1.6}
+/* Sections */
+.sec{padding:64px 24px;max-width:1100px;margin:0 auto}
+.sec h2{font-size:32px;text-align:center;margin-bottom:10px;letter-spacing:-0.5px}
+.sec .sub{text-align:center;color:var(--ink3);margin-bottom:40px;font-size:14px}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:800px){.feat{grid-template-columns:1fr}.hero h1{font-size:30px}}
+.feat-i{padding:28px;border-radius:var(--r2);border:1px solid var(--brd);background:var(--card);transition:all 0.2s}
+.feat-i:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.feat-i .fic{font-size:26px;margin-bottom:10px;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;background:var(--pri-bg);border-radius:12px}
+.feat-i h4{font-size:15px;font-weight:700;margin-bottom:6px}
+.feat-i p{font-size:13px;color:var(--ink3);line-height:1.65}
 
-.am-l{display:flex;flex-wrap:wrap;gap:4px}.am{background:var(--bg2);padding:2px 8px;border-radius:5px;font-size:10.5px;color:var(--ink3);font-weight:500}
-.inv-b{font-family:monospace;font-weight:700;font-size:12px;color:var(--pri);background:var(--priP);padding:2px 8px;border-radius:5px}
+/* Amenity tags */
+.am-l{display:flex;flex-wrap:wrap;gap:5px}.am{background:var(--bg2);padding:3px 10px;border-radius:6px;font-size:11px;color:var(--ink2);font-weight:500}
+.inv-b{font-family:'SF Mono',Monaco,Menlo,monospace;font-weight:700;font-size:12px;color:var(--pri);background:var(--pri-bg);padding:3px 10px;border-radius:6px}
 
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.anim{animation:fadeIn .3s ease}
-.ld{display:flex;align-items:center;justify-content:center;min-height:250px;gap:8px}
-.spr{display:inline-block;width:16px;height:16px;border:2px solid var(--brd);border-top-color:var(--pri);border-radius:50%;animation:spin .5s linear infinite}
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes modalIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeIn 0.35s ease}
+
+/* Loading */
+.ld{display:flex;align-items:center;justify-content:center;min-height:280px;gap:10px}
+.spr{display:inline-block;width:18px;height:18px;border:2.5px solid var(--brd);border-top-color:var(--pri);border-radius:50%;animation:spin 0.6s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.upill{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--bg2);font-size:12px;font-weight:500}
-.uav{width:24px;height:24px;border-radius:50%;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
-.tabs{display:flex;gap:2px;border-bottom:2px solid var(--brd);margin-bottom:16px}
-.tab{padding:8px 14px;font-size:12px;font-weight:600;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer}
+
+/* User pill */
+.upill{display:flex;align-items:center;gap:8px;padding:5px 12px;border-radius:24px;background:var(--bg);font-size:13px;font-weight:500;border:1px solid var(--brd)}
+.uav{width:28px;height:28px;border-radius:50%;background:var(--pri);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--brd);margin-bottom:18px}
+.tab{padding:10px 16px;font-size:12px;font-weight:600;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all 0.15s}
 .tab:hover{color:var(--ink)}.tab.on{color:var(--pri);border-color:var(--pri)}
-@media(max-width:900px){.side{transform:translateX(-250px)}.mn{margin-left:0!important}}
+
+/* Timeline for activity */
+.tl-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--brd);position:relative}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--pri-ll);margin-top:5px;flex-shrink:0;position:relative}
+.tl-dot::after{content:"";position:absolute;top:12px;left:4px;width:2px;height:calc(100% + 18px);background:var(--brd)}
+.tl-item:last-child .tl-dot::after{display:none}
+.tl-content{flex:1;min-width:0}
+.tl-action{font-size:13px;font-weight:500;color:var(--ink)}
+.tl-meta{font-size:11px;color:var(--ink4);margin-top:3px;display:flex;gap:12px}
+
+/* Mobile hamburger */
+.hamburger{display:none;background:none;border:none;font-size:22px;color:var(--ink);cursor:pointer;padding:4px}
+.mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+
+@media(max-width:900px){
+  .side{transform:translateX(-260px)}
+  .side.open{transform:translateX(0)}
+  .mn{margin-left:0!important}
+  .hamburger{display:block}
+  .mobile-overlay.show{display:block}
+}
 @media print{.side,.top{display:none}.mn{margin-left:0}}
+
+/* Invoice builder */
+.line-item-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;animation:slideDown 0.2s ease}
+.line-item-row .fi{flex:1}
+.line-item-row .fi-sm{width:80px;flex:none}
+.remove-line{background:var(--err-bg);color:var(--err);border:none;border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all 0.15s;flex-shrink:0}
+.remove-line:hover{background:var(--err);color:#fff}
 </style></head><body><div id="root"></div>
 <script type="text/babel">
-const {useState,useEffect,useMemo,createContext,useContext}=React;
+const {useState,useEffect,useMemo,useCallback,createContext,useContext,useRef}=React;
 const X=createContext();
-const api=async(u,o={})=>{const c={headers:{'Content-Type':'application/json'},...o};if(o.body&&typeof o.body==='object'&&!(o.body instanceof FormData))c.body=JSON.stringify(o.body);else if(o.body instanceof FormData){delete c.headers['Content-Type'];c.body=o.body}const r=await fetch(u,c);if(!r.ok){const e=await r.json().catch(()=>({detail:'Error'}));throw new Error(e.detail||'Error')}return r.json()};
-const CI={'Meeting Space':'💼','Event Space':'🏛️','Creative Space':'🎬','Laboratory':'🔬','Dining & Social':'☕','Outdoor Space':'🌳','Seminar Room':'🎓','Lecture Hall':'📚'};
-const Toasts=({items,rm})=><div className="ts-c">{items.map(t=><div key={t.id} className={"ts ts-"+t.type} onClick={()=>rm(t.id)}>{t.msg}</div>)}</div>;
-const Modal=({open,close,title,children,footer,wide})=>{if(!open)return null;return<div className="mo-bg" onClick={close}><div className="mo" style={wide?{maxWidth:740}:{}} onClick={e=>e.stopPropagation()}><div className="mo-h"><h3>{title}</h3><button className="bt bt-g bt-sm" onClick={close}>✕</button></div><div className="mo-b">{children}</div>{footer&&<div className="mo-f">{footer}</div>}</div></div>};
-const Cal=({sel,onSel})=>{const[vd,sv]=useState(new Date());const y=vd.getFullYear(),mo=vd.getMonth();const dim=new Date(y,mo+1,0).getDate(),fd=new Date(y,mo,1).getDay();const today=new Date().toISOString().split('T')[0];const days=[];for(let i=0;i<fd;i++)days.push(null);for(let d=1;d<=dim;d++)days.push(d);return<div><div className="cl-h"><button className="bt bt-g bt-sm" onClick={()=>sv(new Date(y,mo-1))}>←</button><strong style={{fontSize:12}}>{vd.toLocaleDateString('en',{month:'long',year:'numeric'})}</strong><button className="bt bt-g bt-sm" onClick={()=>sv(new Date(y,mo+1))}>→</button></div><div className="cl-g">{['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=><div key={d} className="cl-dh">{d}</div>)}{days.map((d,i)=>{if(!d)return<div key={"e"+i} className="cl-d emp"/>;const ds=y+"-"+String(mo+1).padStart(2,'0')+"-"+String(d).padStart(2,'0');return<div key={d} className={"cl-d"+(ds===today?" tod":"")+(ds===sel?" csel":"")+(ds<today?" past":"")} onClick={()=>ds>=today&&onSel(ds)}>{d}</div>})}</div></div>};
 
-const Landing=()=>{const{go}=useContext(X);const[facs,sF]=useState([]);useEffect(()=>{api('/api/facilities').then(sF).catch(()=>{})},[]);
-return<div>
-<div className="hero"><div>
-<div style={{fontSize:10,letterSpacing:4,textTransform:'uppercase',opacity:.3,marginBottom:14,fontWeight:700}}>Regional Centre for Energy & Environmental Sustainability · UENR</div>
-<h1>Book Research-Grade Facilities</h1>
-<p>Reserve conference rooms, laboratories, lecture halls, studios and event spaces at UENR's premier research centre — in minutes, not phone calls.</p>
-<div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}><button className="bt bt-w" onClick={()=>go('browse')}>🔍 Browse Facilities</button><button className="bt bt-o" onClick={()=>go('guest')}>📅 Quick Book</button></div>
-<div style={{marginTop:16,display:'flex',gap:8,justifyContent:'center'}}><button className="bt bt-g" style={{color:'rgba(255,255,255,.4)'}} onClick={()=>go('login')}>Staff Login →</button><button className="bt bt-g" style={{color:'rgba(255,255,255,.4)'}} onClick={()=>go('register')}>Create Account →</button></div>
-</div></div>
-<div className="sec"><h2>Why RCEES?</h2><p className="sub">State-of-the-art spaces for research, innovation & collaboration</p>
-<div className="feat">{[{i:'🔬',t:'4 Specialized Labs',d:'Renewable Energy, Environmental Monitoring, Bioenergy, Energy Systems.'},{i:'⚡',t:'Real-Time Slots',d:'See availability instantly. Confirmed in seconds.'},{i:'💰',t:'Transparent Pricing',d:'Hourly, half-day & full-day rates. Discount codes available.'},{i:'🔧',t:'Always Maintained',d:'Scheduled maintenance ensures peak condition.'},{i:'📱',t:'MoMo + Cards',d:'MTN MoMo, Vodafone Cash, AirtelTigo, bank cards.'},{i:'🧾',t:'Auto Invoices',d:'Professional invoices & receipts generated automatically.'}].map((f,i)=><div key={i} className="feat-i"><div className="fic">{f.i}</div><h4>{f.t}</h4><p>{f.d}</p></div>)}</div></div>
-<div style={{background:'var(--bg2)',padding:'50px 0'}}><div className="sec" style={{padding:'0 24px'}}><h2>Our Facilities</h2><p className="sub">{facs.length} spaces ready for your next event</p>
-<div className="g g4">{facs.slice(0,8).map(f=>{const m=JSON.parse(f.media||'[]');return<div key={f.id} className="fc" onClick={()=>{window.__fid=f.id;go('detail')}}><div className="fc-im" style={m.length?{backgroundImage:'url('+m[0].url+')'}:{}}>{!m.length&&<span>{CI[f.cat_name]||'🏢'}</span>}<span className="fc-ct">{f.cat_name}</span>{f.avg_rating>0&&<span className="fc-rt">★ {f.avg_rating.toFixed(1)}</span>}</div><div className="fc-bd"><div className="fc-nm">{f.name}</div><div className="fc-ds">{f.short_desc}</div><div className="fc-mt"><span>👥 {f.capacity}</span><span>📍 {f.building}</span></div><div className="fc-pr">GH₵{f.hourly_rate}<small>/hr</small></div></div></div>})}</div>
-{facs.length>8&&<div style={{textAlign:'center',marginTop:20}}><button className="bt bt-p bt-lg" onClick={()=>go('browse')}>View All {facs.length} →</button></div>}
-</div></div>
-<div style={{background:'#0f172a',color:'#fff',padding:'28px',textAlign:'center'}}><p style={{opacity:.3,fontSize:11}}>RCEES Facilities · UENR · Sunyani, Ghana · © {new Date().getFullYear()}</p></div>
-</div>};
+const api=async(u,o={})=>{
+  const c={headers:{"Content-Type":"application/json"},...o};
+  const authData=localStorage.getItem("rcees_auth");
+  if(authData){try{const ad=JSON.parse(authData);if(ad.token)c.headers["Authorization"]="Bearer "+ad.token}catch(e){}}
+  if(o.body&&typeof o.body==="object"&&!(o.body instanceof FormData))c.body=JSON.stringify(o.body);
+  else if(o.body instanceof FormData){delete c.headers["Content-Type"];c.body=o.body}
+  const r=await fetch(u,c);
+  if(!r.ok){const e=await r.json().catch(()=>({detail:"Error"}));throw new Error(e.detail||"Error")}
+  return r.json();
+};
 
-const Login=()=>{const{go,login,toast}=useContext(X);const[e,sE]=useState('');const[p,sP]=useState('');const[ld,sL]=useState(false);const sub=async ev=>{ev.preventDefault();sL(true);try{const d=await api('/api/auth/login',{method:'POST',body:{email:e,password:p}});login(d.user,d.token);toast('Welcome back!','ok');go(d.user.role==='admin'?'a-dash':'u-dash')}catch(err){toast(err.message,'err')}sL(false)};return<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0f172a'}}><div className="crd anim" style={{width:380,padding:32}}><div style={{textAlign:'center',marginBottom:24}}><div className="s-ic" style={{margin:'0 auto 12px',width:48,height:48,fontSize:20}}>R</div><h2 style={{fontSize:22}}>Welcome Back</h2><p style={{color:'var(--ink3)',fontSize:12}}>Sign in to RCEES Facilities</p></div><form onSubmit={sub}><div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={e} onChange={ev=>sE(ev.target.value)} required/></div><div className="fg"><label className="fl">Password</label><input className="fi" type="password" value={p} onChange={ev=>sP(ev.target.value)} required/></div><button className="bt bt-p" type="submit" disabled={ld} style={{width:'100%',justifyContent:'center'}}>{ld?<span className="spr"/>:'Sign In'}</button></form><div style={{textAlign:'center',marginTop:16,fontSize:12,color:'var(--ink3)'}}>No account? <a style={{color:'var(--pri)',cursor:'pointer',fontWeight:600}} onClick={()=>go('register')}>Register</a><br/><a style={{color:'var(--ink4)',cursor:'pointer'}} onClick={()=>go('landing')}>← Home</a></div></div></div>};
-const Register=()=>{const{go,login,toast}=useContext(X);const[f,sF]=useState({name:'',email:'',password:'',phone:'',organization:''});const[ld,sL]=useState(false);const sub=async ev=>{ev.preventDefault();sL(true);try{const d=await api('/api/auth/register',{method:'POST',body:f});login(d.user,d.token);toast('Account created!','ok');go('u-dash')}catch(err){toast(err.message,'err')}sL(false)};return<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#0f172a'}}><div className="crd anim" style={{width:420,padding:32}}><div style={{textAlign:'center',marginBottom:20}}><h2 style={{fontSize:22}}>Create Account</h2></div><form onSubmit={sub}><div className="fg"><label className="fl">Full Name</label><input className="fi" value={f.name} onChange={e=>sF({...f,name:e.target.value})} required/></div><div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={f.email} onChange={e=>sF({...f,email:e.target.value})} required/></div><div className="fg"><label className="fl">Password</label><input className="fi" type="password" value={f.password} onChange={e=>sF({...f,password:e.target.value})} required/></div><div className="g g2"><div className="fg"><label className="fl">Phone</label><input className="fi" value={f.phone} onChange={e=>sF({...f,phone:e.target.value})}/></div><div className="fg"><label className="fl">Organization</label><input className="fi" value={f.organization} onChange={e=>sF({...f,organization:e.target.value})}/></div></div><button className="bt bt-p" type="submit" disabled={ld} style={{width:'100%',justifyContent:'center'}}>{ld?<span className="spr"/>:'Create Account'}</button></form><div style={{textAlign:'center',marginTop:12,fontSize:12,color:'var(--ink3)'}}>Have account? <a style={{color:'var(--pri)',cursor:'pointer'}} onClick={()=>go('login')}>Sign in</a> · <a style={{color:'var(--ink4)',cursor:'pointer'}} onClick={()=>go('landing')}>Home</a></div></div></div>};
+const CI={"Meeting Space":"\u{1F4BC}","Event Space":"\u{1F3DB}","Creative Space":"\u{1F3AC}","Laboratory":"\u{1F52C}","Dining & Social":"\u2615","Outdoor Space":"\u{1F333}","Seminar Room":"\u{1F393}","Lecture Hall":"\u{1F4DA}"};
 
-const Browse=()=>{const{go}=useContext(X);const[facs,sF]=useState([]);const[cats,sC]=useState([]);const[q,sQ]=useState('');const[cat,sCat]=useState('');const[ld,sL]=useState(true);useEffect(()=>{api('/api/facilities').then(f=>{sF(f);sL(false)});api('/api/categories').then(sC)},[]);const fl=facs.filter(f=>(f.name+' '+(f.building||'')).toLowerCase().includes(q.toLowerCase())&&(!cat||f.category_id===cat));return<div style={{maxWidth:1200,margin:'0 auto',padding:'24px 20px'}}><button className="bt bt-g bt-sm" onClick={()=>go('landing')}>← Home</button><div style={{margin:'8px 0 20px'}}><h1 style={{fontSize:26}}>Browse Facilities</h1><p style={{color:'var(--ink3)',fontSize:13}}>{facs.length} spaces at RCEES</p></div><div style={{display:'flex',gap:8,marginBottom:18,flexWrap:'wrap'}}><input className="fi" style={{maxWidth:250}} placeholder="Search..." value={q} onChange={e=>sQ(e.target.value)}/><select className="fi" style={{maxWidth:180}} value={cat} onChange={e=>sCat(e.target.value)}><option value="">All Categories</option>{cats.map(c=><option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}</select></div>{ld?<div className="ld"><div className="spr"/></div>:<div className="g g3">{fl.map(f=>{const m=JSON.parse(f.media||'[]');return<div key={f.id} className="fc" onClick={()=>{window.__fid=f.id;go('detail')}}><div className="fc-im" style={m.length?{backgroundImage:'url('+m[0].url+')'}:{}}>{!m.length&&<span>{CI[f.cat_name]||'🏢'}</span>}<span className="fc-ct">{f.cat_name}</span></div><div className="fc-bd"><div className="fc-nm">{f.name}</div><div className="fc-ds">{f.short_desc}</div><div className="fc-mt"><span>👥 {f.capacity}</span><span>📍 {f.building}</span></div><div style={{marginTop:6}}><div className="am-l">{JSON.parse(f.amenities||'[]').slice(0,3).map((a,i)=><span key={i} className="am">{a}</span>)}</div></div><div className="fc-pr">GH₵{f.hourly_rate}<small>/hr</small> <span style={{fontSize:11,color:'var(--ink4)',marginLeft:6}}>Half: GH₵{f.half_day_rate}</span></div></div></div>})}</div>}</div>};
+/* ---- Toasts ---- */
+const Toasts=({items,rm})=>(
+  <div className="ts-c">
+    {items.map(t=>(
+      <div key={t.id} className={"ts ts-"+(t.type||"inf")}>
+        <span>{t.msg}</span>
+        <span className="ts-close" onClick={()=>rm(t.id)}>&times;</span>
+      </div>
+    ))}
+  </div>
+);
 
-const Detail=()=>{const{go,user,toast}=useContext(X);const[fac,sF]=useState(null);const[dt,sDt]=useState(new Date().toISOString().split('T')[0]);const[sd,sSD]=useState(null);const[ss,sSS]=useState([]);const[eq,sEq]=useState([]);const[se,sSE]=useState([]);const[step,sSt]=useState(1);const[res,sRes]=useState(null);const[fm,sFm]=useState({title:'',guest_name:'',guest_email:'',guest_phone:'',guest_org:'',attendees:1,special_req:'',discount_code:'',event_type:'general'});const[pm,sPm]=useState('');const[di,sDi]=useState(null);const[ld,sL]=useState(true);const fid=window.__fid;
-useEffect(()=>{if(fid){api('/api/facilities/'+fid).then(f=>{sF(f);sL(false)});api('/api/equipment').then(sEq)}},[fid]);
-useEffect(()=>{if(fid&&dt){api('/api/facilities/'+fid+'/slots?date='+dt).then(sSD);sSS([])}},[fid,dt]);
-const tog=s=>{if(!s.available)return;const ex=ss.find(x=>x.start===s.start);if(ex)sSS(ss.filter(x=>x.start!==s.start));else sSS([...ss,s].sort((a,b)=>a.start.localeCompare(b.start)))};
-const con=ss.length<=1||ss.every((s,i)=>i===0||s.start===ss[i-1].end);const hrs=ss.length;
-const bp=useMemo(()=>{if(!fac||hrs===0)return 0;const r=sd?.is_weekend?fac.hourly_rate*fac.weekend_multiplier:fac.hourly_rate;if(hrs>=8&&fac.full_day_rate>0){let p=fac.full_day_rate;if(sd?.is_weekend)p*=fac.weekend_multiplier;return p}if(hrs>=4&&fac.half_day_rate>0){let p=fac.half_day_rate;if(sd?.is_weekend)p*=fac.weekend_multiplier;if(hrs>4)p+=(hrs-4)*r;return p}return hrs*r},[fac,hrs,sd]);
-const ec=se.reduce((s,eid)=>{const e=eq.find(x=>x.id===eid);return s+(e?e.hourly_rate*hrs:0)},0);const sub=bp+ec;
-const da=di?.valid?(di.discount.dtype==='percentage'?sub*(di.discount.value/100):Math.min(di.discount.value,sub)):0;
-const cd=di?.valid&&di.discount.max_discount>0?Math.min(da,di.discount.max_discount):da;const tot=Math.max(0,sub-cd);
-const vDisc=async()=>{if(!fm.discount_code)return;try{const r=await api('/api/discounts/validate',{method:'POST',body:{code:fm.discount_code,hours:hrs,amount:sub}});sDi(r);toast(r.valid?'Discount applied!':r.message,r.valid?'ok':'err')}catch(e){toast('Invalid code','err')}};
-const book=async()=>{if(!con){toast('Select contiguous slots','err');return}try{const bd={facility_id:fid,title:fm.title,event_type:fm.event_type,booking_date:dt,start_time:ss[0].start,end_time:ss[ss.length-1].end,attendees:fm.attendees,special_req:fm.special_req,discount_code:fm.discount_code,equipment:se,pay_method:pm};if(user)bd.user_id=user.id;else{bd.guest_name=fm.guest_name;bd.guest_email=fm.guest_email;bd.guest_phone=fm.guest_phone;bd.guest_org=fm.guest_org}const r=await api('/api/bookings',{method:'POST',body:bd});sRes(r);sSt(4);toast('Booking submitted!','ok')}catch(err){toast(err.message,'err')}};
-if(ld)return<div className="ld"><div className="spr"/></div>;if(!fac)return<div className="ld">Not found</div>;
-const media=JSON.parse(fac.media||'[]');const amen=JSON.parse(fac.amenities||'[]');const slots=sd?.slots||[];
-return<div style={{maxWidth:1100,margin:'0 auto',padding:'24px 20px'}}><button className="bt bt-g bt-sm" onClick={()=>go('browse')} style={{marginBottom:12}}>← Back</button>
-<div style={{display:'grid',gridTemplateColumns:'1fr 340px',gap:24,alignItems:'start'}}>
-<div className="anim">
-<div style={{height:260,borderRadius:'var(--r3)',overflow:'hidden',marginBottom:16,background:'linear-gradient(135deg,var(--priP),var(--bg2))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:56,backgroundSize:'cover',backgroundPosition:'center',...(media.length?{backgroundImage:'url('+media[0].url+')'}:{})}}>{!media.length&&(CI[fac.cat_name]||'🏢')}</div>
-<h1 style={{fontSize:26,marginBottom:4}}>{fac.name}</h1>
-<div style={{display:'flex',gap:12,color:'var(--ink3)',fontSize:12,marginBottom:12,flexWrap:'wrap'}}><span>📍 {fac.location}</span><span>👥 {fac.capacity}</span><span>🏷️ {fac.cat_name}</span></div>
-<p style={{color:'var(--ink2)',lineHeight:1.7,marginBottom:16,fontSize:13}}>{fac.description}</p>
-<div className="am-l" style={{marginBottom:16}}>{amen.map((a,i)=><span key={i} className="am" style={{padding:'3px 10px'}}>{a}</span>)}</div>
-<div className="g g3" style={{marginBottom:16}}>
-<div className="st"><div className="st-l">Hourly</div><div className="st-v" style={{fontSize:18}}>GH₵{fac.hourly_rate}</div></div>
-<div className="st sw"><div className="st-l">Half-Day</div><div className="st-v" style={{fontSize:18}}>GH₵{fac.half_day_rate}</div></div>
-<div className="st sg"><div className="st-l">Full-Day</div><div className="st-v" style={{fontSize:18}}>GH₵{fac.full_day_rate}</div></div>
-</div></div>
+/* ---- Modal ---- */
+const Modal=({open,close,title,children,footer,wide})=>{
+  if(!open)return null;
+  return(
+    <div className="mo-bg" onClick={close}>
+      <div className="mo" style={wide?{maxWidth:780}:{}} onClick={e=>e.stopPropagation()}>
+        <div className="mo-h"><h3>{title}</h3><button className="bt bt-g bt-sm" onClick={close}>&times;</button></div>
+        <div className="mo-b">{children}</div>
+        {footer&&<div className="mo-f">{footer}</div>}
+      </div>
+    </div>
+  );
+};
 
-<div className="crd anim" style={{position:'sticky',top:68}}>
-{step===1&&<><h3 style={{fontSize:14,marginBottom:10,fontFamily:'var(--fb)',fontWeight:700}}>📅 Select Date & Time</h3><Cal sel={dt} onSel={sDt}/><div style={{margin:'10px 0 6px',fontSize:11,color:'var(--ink3)'}}>Slots for <strong>{new Date(dt+'T12:00').toLocaleDateString('en',{weekday:'short',month:'short',day:'numeric'})}</strong>:</div><div className="sl-g">{slots.map(s=><div key={s.start} className={"sl "+(s.available?(ss.find(x=>x.start===s.start)?'sel':'av'):s.status==='maintenance'?'mnt':'bk')} onClick={()=>tog(s)}>{s.start}<div style={{fontSize:9,opacity:.6}}>GH₵{s.rate}</div></div>)}</div>{ss.length>0&&!con&&<p style={{color:'var(--err)',fontSize:10,marginTop:4}}>⚠ Select contiguous slots</p>}{ss.length>0&&con&&<div style={{marginTop:10,padding:8,background:'var(--priP)',borderRadius:'var(--r1)',fontSize:12}}><strong>{hrs}hr{hrs>1?'s':''}</strong>: {ss[0]?.start}–{ss[ss.length-1]?.end}<div style={{fontWeight:700,fontSize:16,color:'var(--pri)',marginTop:2,fontFamily:'var(--fh)'}}>GH₵{bp.toFixed(2)}</div></div>}<button className="bt bt-p" style={{width:'100%',justifyContent:'center',marginTop:10}} disabled={!ss.length||!con} onClick={()=>sSt(2)}>Continue →</button></>}
+/* ---- Calendar Component ---- */
+const Cal=({sel,onSel,blockedDates,allowPast})=>{
+  const[vd,sv]=useState(new Date());
+  const y=vd.getFullYear(),mo=vd.getMonth();
+  const dim=new Date(y,mo+1,0).getDate(),fd=new Date(y,mo,1).getDay();
+  const today=new Date().toISOString().split("T")[0];
+  const days=[];
+  for(let i=0;i<fd;i++)days.push(null);
+  for(let d=1;d<=dim;d++)days.push(d);
+  const blocked=blockedDates||[];
+  return(
+    <div>
+      <div className="cl-h">
+        <button className="bt bt-g bt-sm" onClick={()=>sv(new Date(y,mo-1))}>&larr;</button>
+        <strong style={{fontSize:13}}>{vd.toLocaleDateString("en",{month:"long",year:"numeric"})}</strong>
+        <button className="bt bt-g bt-sm" onClick={()=>sv(new Date(y,mo+1))}>&rarr;</button>
+      </div>
+      <div className="cl-g">
+        {["Su","Mo","Tu","We","Th","Fr","Sa"].map(d=><div key={d} className="cl-dh">{d}</div>)}
+        {days.map((d,i)=>{
+          if(!d)return <div key={"e"+i} className="cl-d emp"/>;
+          const ds=y+"-"+String(mo+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+          const isPast=!allowPast&&ds<today;
+          const isBlocked=blocked.includes(ds);
+          let cls="cl-d";
+          if(ds===today)cls+=" tod";
+          if(ds===sel)cls+=" csel";
+          if(isPast)cls+=" past";
+          if(isBlocked&&ds!==sel)cls+=" blocked-date";
+          return <div key={d} className={cls} onClick={()=>{if(!isPast)onSel(ds)}}>{d}</div>;
+        })}
+      </div>
+    </div>
+  );
+};
 
-{step===2&&<><div style={{display:'flex',alignItems:'center',gap:6,marginBottom:10}}><button className="bt bt-g bt-sm" onClick={()=>sSt(1)}>←</button><h3 style={{fontSize:14,fontFamily:'var(--fb)',fontWeight:700}}>Details</h3></div><div className="fg"><label className="fl">Event Title *</label><input className="fi" value={fm.title} onChange={e=>sFm({...fm,title:e.target.value})}/></div><div className="g g2"><div className="fg"><label className="fl">Type</label><select className="fi" value={fm.event_type} onChange={e=>sFm({...fm,event_type:e.target.value})}>{['general','meeting','lecture','workshop','seminar','conference','research','exam'].map(t=><option key={t}>{t}</option>)}</select></div><div className="fg"><label className="fl">Attendees</label><input className="fi" type="number" min={1} max={fac.capacity} value={fm.attendees} onChange={e=>sFm({...fm,attendees:parseInt(e.target.value)||1})}/></div></div>{!user&&<><p style={{fontSize:11,color:'var(--pri)',fontWeight:700,margin:'6px 0'}}>👤 Your Details (for notifications)</p><div className="fg"><label className="fl">Name *</label><input className="fi" value={fm.guest_name} onChange={e=>sFm({...fm,guest_name:e.target.value})}/></div><div className="g g2"><div className="fg"><label className="fl">Email *</label><input className="fi" type="email" value={fm.guest_email} onChange={e=>sFm({...fm,guest_email:e.target.value})}/></div><div className="fg"><label className="fl">Phone</label><input className="fi" value={fm.guest_phone} onChange={e=>sFm({...fm,guest_phone:e.target.value})}/></div></div></>}<button className="bt bt-p" style={{width:'100%',justifyContent:'center'}} disabled={!fm.title||(!user&&(!fm.guest_name||!fm.guest_email))} onClick={()=>sSt(3)}>Review →</button></>}
+/* ============ LANDING PAGE ============ */
+const Landing=()=>{
+  const{go}=useContext(X);
+  const[facs,sF]=useState([]);
+  useEffect(()=>{api("/api/facilities").then(sF).catch(()=>{})},[]);
+  return(
+    <div>
+      <div className="hero">
+        <div>
+          <div style={{fontSize:11,letterSpacing:5,textTransform:"uppercase",opacity:.3,marginBottom:16,fontWeight:600}}>Regional Centre for Energy & Environmental Sustainability</div>
+          <h1>Book Research-Grade Facilities</h1>
+          <p>Reserve conference rooms, laboratories, lecture halls, studios and event spaces at UENR - in minutes, not phone calls.</p>
+          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+            <button className="bt bt-w" onClick={()=>go("browse")}>Browse Facilities</button>
+            <button className="bt bt-o" onClick={()=>go("guest")}>Quick Book</button>
+          </div>
+          <div style={{marginTop:20,display:"flex",gap:10,justifyContent:"center"}}>
+            <button className="bt bt-g" style={{color:"rgba(255,255,255,.35)"}} onClick={()=>go("login")}>Staff Login &rarr;</button>
+            <button className="bt bt-g" style={{color:"rgba(255,255,255,.35)"}} onClick={()=>go("register")}>Create Account &rarr;</button>
+          </div>
+        </div>
+      </div>
 
-{step===3&&<><div style={{display:'flex',alignItems:'center',gap:6,marginBottom:10}}><button className="bt bt-g bt-sm" onClick={()=>sSt(2)}>←</button><h3 style={{fontSize:14,fontFamily:'var(--fb)',fontWeight:700}}>Review & Submit</h3></div><div className="pb"><div style={{marginBottom:8,fontSize:11,color:'var(--ink3)'}}><strong>{fac.name}</strong><br/>{new Date(dt+'T12:00').toLocaleDateString('en',{weekday:'short',month:'short',day:'numeric',year:'numeric'})} · {ss[0]?.start}–{ss[ss.length-1]?.end}</div><div className="pln"><span>Facility ({hrs}hr{hrs>1?'s':''})</span><span>GH₵{bp.toFixed(2)}</span></div>{ec>0&&<div className="pln"><span>Equipment</span><span>GH₵{ec.toFixed(2)}</span></div>}{cd>0&&<div className="pln" style={{color:'var(--ok)'}}><span>Discount</span><span>−GH₵{cd.toFixed(2)}</span></div>}<div className="pln ptot"><span>Total</span><span style={{color:'var(--pri)'}}>GH₵{tot.toFixed(2)}</span></div></div><div className="fg" style={{marginTop:10}}><label className="fl">Discount Code</label><div style={{display:'flex',gap:4}}><input className="fi" value={fm.discount_code} onChange={e=>sFm({...fm,discount_code:e.target.value})} placeholder="RCEES10" style={{flex:1}}/><button className="bt bt-s bt-sm" onClick={vDisc}>Apply</button></div></div>{fac.requires_approval?<div style={{background:'var(--warnP)',padding:'8px 12px',borderRadius:'var(--r1)',fontSize:11,color:'var(--warn)',marginBottom:8}}>📋 Requires admin approval. You'll get an email with a payment link once approved.</div>:<div style={{background:'var(--priP)',padding:'8px 12px',borderRadius:'var(--r1)',fontSize:11,color:'var(--pri)',marginBottom:8}}>✅ Auto-confirmed. An invoice will be generated automatically.</div>}<button className="bt bt-p bt-lg" style={{width:'100%',justifyContent:'center'}} onClick={book}>Submit Booking</button></>}
+      <div className="sec">
+        <h2>Why RCEES?</h2>
+        <p className="sub">State-of-the-art spaces for research, innovation and collaboration</p>
+        <div className="feat">
+          {[
+            {i:"\u{1F52C}",t:"4 Specialized Labs",d:"Renewable Energy, Environmental Monitoring, Bioenergy, Energy Systems."},
+            {i:"\u26A1",t:"Real-Time Slots",d:"See availability instantly. Confirmed in seconds."},
+            {i:"\u{1F4B0}",t:"Transparent Pricing",d:"Hourly, half-day and full-day rates. Discount codes available."},
+            {i:"\u{1F527}",t:"Always Maintained",d:"Scheduled maintenance ensures peak condition."},
+            {i:"\u{1F4F1}",t:"MoMo + Cards",d:"MTN MoMo, Vodafone Cash, AirtelTigo, bank cards."},
+            {i:"\u{1F9FE}",t:"Auto Invoices",d:"Professional invoices and receipts generated automatically."}
+          ].map((f,i)=>(
+            <div key={i} className="feat-i">
+              <div className="fic">{f.i}</div>
+              <h4>{f.t}</h4>
+              <p>{f.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
 
-{step===4&&res&&<div style={{textAlign:'center'}}><div style={{fontSize:44,marginBottom:8}}>{res.status==='confirmed'?'✅':'📨'}</div><h3 style={{fontSize:17,marginBottom:4}}>{res.status==='confirmed'?'Confirmed!':'Submitted for Approval'}</h3><p style={{fontSize:11,color:'var(--ink3)',marginBottom:12}}>{res.status==='confirmed'?'Your booking is confirmed.':'You'll receive an email once approved.'}</p><div className="crd" style={{background:'var(--card2)',textAlign:'left',fontSize:12,padding:12,marginBottom:12}}><div style={{marginBottom:3}}><strong>Ref:</strong> <span className="inv-b">{res.ref}</span></div><div style={{marginBottom:3}}><strong>Date:</strong> {res.booking_date} · {res.start_time}–{res.end_time}</div><div style={{marginBottom:3}}><strong>Status:</strong> <span className={"tg "+(res.status==='confirmed'?'t-ok':'t-w')}>{res.status}</span></div><div><strong>Amount:</strong> GH₵{res.final_amount?.toFixed(2)}</div></div><div style={{display:'flex',gap:6,justifyContent:'center'}}><button className="bt bt-p" onClick={()=>{sSt(1);sSS([]);sRes(null);sDi(null)}}>Book Another</button><button className="bt bt-s" onClick={()=>go(user?'u-dash':'landing')}>{user?'Dashboard':'Home'}</button></div></div>}
-</div></div></div>};
+      <div style={{background:"#f1f5f9",padding:"60px 0"}}>
+        <div className="sec" style={{padding:"0 24px"}}>
+          <h2>Our Facilities</h2>
+          <p className="sub">{facs.length} spaces ready for your next event</p>
+          <div className="g g4">
+            {facs.slice(0,8).map(f=>{
+              const m=JSON.parse(f.media||"[]");
+              return(
+                <div key={f.id} className="fc" onClick={()=>{window.__fid=f.id;go("detail")}}>
+                  <div className="fc-im" style={m.length?{backgroundImage:"url("+m[0].url+")"}:{}}>
+                    {!m.length&&<span>{CI[f.cat_name]||"\u{1F3E2}"}</span>}
+                    <span className="fc-ct">{f.cat_name}</span>
+                    {f.avg_rating>0&&<span className="fc-rt">{"\u2605"} {f.avg_rating.toFixed(1)}</span>}
+                  </div>
+                  <div className="fc-bd">
+                    <div className="fc-nm">{f.name}</div>
+                    <div className="fc-ds">{f.short_desc}</div>
+                    <div className="fc-mt"><span>{"\u{1F465}"} {f.capacity}</span><span>{"\u{1F4CD}"} {f.building}</span></div>
+                    <div className="fc-pr">GH₵{f.hourly_rate}<small>/hr</small></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {facs.length>8&&<div style={{textAlign:"center",marginTop:24}}><button className="bt bt-p bt-lg" onClick={()=>go("browse")}>View All {facs.length} &rarr;</button></div>}
+        </div>
+      </div>
 
-const Guest=()=>{const{go}=useContext(X);const[facs,sF]=useState([]);const[q,sQ]=useState('');const[lr,sLR]=useState(null);useEffect(()=>{api('/api/facilities').then(sF)},[]);const lu=async()=>{if(!q)return;if(q.includes('@'))sLR({t:'l',d:await api('/api/bookings/guest/'+encodeURIComponent(q))});else{try{sLR({t:'s',d:await api('/api/bookings/ref/'+q)})}catch(e){sLR({t:'l',d:[]})}}};return<div style={{maxWidth:900,margin:'0 auto',padding:'32px 20px'}}><button className="bt bt-g bt-sm" onClick={()=>go('landing')}>← Home</button><h1 style={{fontSize:26,marginTop:8,marginBottom:4}}>Quick Guest Booking</h1><p style={{color:'var(--ink3)',fontSize:12,marginBottom:20}}>No account needed.</p><div className="crd" style={{marginBottom:18}}><h3 style={{marginBottom:8,fontSize:14,fontFamily:'var(--fb)',fontWeight:700}}>🔍 Look up booking</h3><div style={{display:'flex',gap:6}}><input className="fi" placeholder="Email or reference (RCEES-XXXXX)" value={q} onChange={e=>sQ(e.target.value)} style={{flex:1}} onKeyDown={e=>e.key==='Enter'&&lu()}/><button className="bt bt-s" onClick={lu}>Find</button></div>{lr&&<div style={{marginTop:10}}>{lr.t==='s'?<div className="crd" style={{background:'var(--card2)',padding:12,fontSize:12}}><strong>{lr.d.ref}</strong> — {lr.d.fac_name} · {lr.d.booking_date} · <span className={"tg "+(lr.d.status==='confirmed'?'t-ok':'t-w')}>{lr.d.status}</span> <span className={"tg "+(lr.d.pay_status==='paid'?'t-ok':'t-w')}>{lr.d.pay_status}</span></div>:lr.d.length===0?<p style={{fontSize:12,color:'var(--ink3)',marginTop:6}}>No bookings found.</p>:<div className="tw"><table><thead><tr><th>Ref</th><th>Facility</th><th>Date</th><th>Status</th><th>Payment</th></tr></thead><tbody>{lr.d.map(b=><tr key={b.id}><td style={{fontFamily:'monospace',fontWeight:700}}>{b.ref}</td><td>{b.fac_name}</td><td>{b.booking_date}</td><td><span className={"tg "+(b.status==='confirmed'?'t-ok':'t-w')}>{b.status}</span></td><td><span className={"tg "+(b.pay_status==='paid'?'t-ok':'t-w')}>{b.pay_status}</span></td></tr>)}</tbody></table></div>}</div>}</div><h3 style={{marginBottom:10}}>Select a Facility</h3><div className="g g3">{facs.map(f=>{const m=JSON.parse(f.media||'[]');return<div key={f.id} className="fc" onClick={()=>{window.__fid=f.id;go('detail')}}><div className="fc-im" style={m.length?{backgroundImage:'url('+m[0].url+')'}:{}}>{!m.length&&<span>{CI[f.cat_name]||'🏢'}</span>}<span className="fc-ct">{f.cat_name}</span></div><div className="fc-bd"><div className="fc-nm">{f.name}</div><div className="fc-mt"><span>👥 {f.capacity}</span><span>GH₵{f.hourly_rate}/hr</span></div></div></div>})}</div></div>};
+      <div style={{background:"#0f0d23",color:"#fff",padding:"32px",textAlign:"center"}}>
+        <p style={{opacity:.3,fontSize:12}}>RCEES Facilities - UENR - Sunyani, Ghana - {"\u00A9"} {new Date().getFullYear()}</p>
+      </div>
+    </div>
+  );
+};
 
-const UDash=()=>{const{user,go,toast}=useContext(X);const[bks,sB]=useState([]);const[tab,sT]=useState('upcoming');const[ld,sL]=useState(true);const load=()=>api('/api/bookings?user_id='+user.id+'&limit=200').then(d=>{sB(d.items);sL(false)});useEffect(load,[]);const td=new Date().toISOString().split('T')[0];const up=bks.filter(b=>b.booking_date>=td&&!['cancelled','rejected'].includes(b.status));const past=bks.filter(b=>b.booking_date<td||b.status==='completed');const cx=bks.filter(b=>['cancelled','rejected'].includes(b.status));const cancel=async bid=>{if(!confirm('Cancel?'))return;await api('/api/bookings/'+bid,{method:'PUT',body:{status:'cancelled'}});toast('Cancelled','inf');load()};const disp=tab==='upcoming'?up:tab==='past'?past:cx;return<div className="anim"><h1 style={{fontSize:22,marginBottom:14}}>My Bookings</h1><div className="g g3" style={{marginBottom:14}}><div className="st"><div className="st-l">Upcoming</div><div className="st-v">{up.length}</div></div><div className="st sg"><div className="st-l">Completed</div><div className="st-v">{past.length}</div></div><div className="st sw"><div className="st-l">Spent</div><div className="st-v" style={{fontSize:18}}>GH₵{bks.filter(b=>b.pay_status==='paid').reduce((s,b)=>s+(b.final_amount||0),0).toFixed(0)}</div></div></div><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:12}}><div className="tabs" style={{marginBottom:0}}>{['upcoming','past','cancelled'].map(t=><div key={t} className={"tab"+(tab===t?" on":"")} onClick={()=>sT(t)}>{t.charAt(0).toUpperCase()+t.slice(1)}</div>)}</div><button className="bt bt-p bt-sm" onClick={()=>go('browse')}>+ Book</button></div>{ld?<div className="ld"><div className="spr"/></div>:disp.length===0?<div className="crd" style={{textAlign:'center',padding:36}}><p style={{fontSize:32,marginBottom:8}}>📅</p><p style={{color:'var(--ink3)'}}>No {tab} bookings</p></div>:<div style={{display:'flex',flexDirection:'column',gap:8}}>{disp.map(b=><div key={b.id} className="crd" style={{padding:12,display:'flex',alignItems:'center',gap:12}}><div style={{width:40,height:40,borderRadius:8,background:'var(--priP)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16,flexShrink:0}}>{b.cat_icon||'🏢'}</div><div style={{flex:1,minWidth:0}}><div style={{fontWeight:700,fontSize:13}}>{b.title}</div><div style={{fontSize:11,color:'var(--ink3)'}}>{b.fac_name} · {b.booking_date} · {b.start_time}–{b.end_time}</div><div style={{fontSize:10,color:'var(--ink4)',fontFamily:'monospace'}}>{b.ref}</div></div><div style={{textAlign:'right'}}><span className={"tg "+(b.status==='confirmed'?'t-ok':b.status==='cancelled'?'t-err':'t-w')}>{b.status}</span><div style={{fontSize:14,fontWeight:700,marginTop:2}}>GH₵{(b.final_amount||0).toFixed(2)}</div></div>{!['cancelled','rejected','completed'].includes(b.status)&&<button className="bt bt-g bt-sm" style={{color:'var(--err)'}} onClick={()=>cancel(b.id)}>Cancel</button>}</div>)}</div>}</div>};
+/* ============ LOGIN ============ */
+const Login=()=>{
+  const{go,login,toast}=useContext(X);
+  const[e,sE]=useState("");const[p,sP]=useState("");const[ld,sL]=useState(false);
+  const sub=async ev=>{
+    ev.preventDefault();sL(true);
+    try{
+      const d=await api("/api/auth/login",{method:"POST",body:{email:e,password:p}});
+      login(d.user,d.token);toast("Welcome back!","ok");
+      go(d.user.role==="admin"?"a-dash":"u-dash");
+    }catch(err){toast(err.message,"err")}
+    sL(false);
+  };
+  return(
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#0f0d23,#1e1b4b)"}}>
+      <div className="crd anim" style={{width:400,padding:36}}>
+        <div style={{textAlign:"center",marginBottom:28}}>
+          <div className="s-ic" style={{margin:"0 auto 14px",width:50,height:50,fontSize:20}}>R</div>
+          <h2 style={{fontSize:24}}>Welcome Back</h2>
+          <p style={{color:"var(--ink3)",fontSize:13,marginTop:4}}>Sign in to RCEES Facilities</p>
+        </div>
+        <form onSubmit={sub}>
+          <div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={e} onChange={ev=>sE(ev.target.value)} required/></div>
+          <div className="fg"><label className="fl">Password</label><input className="fi" type="password" value={p} onChange={ev=>sP(ev.target.value)} required/></div>
+          <button className="bt bt-p" type="submit" disabled={ld} style={{width:"100%",justifyContent:"center",height:44}}>{ld?<span className="spr"/>:"Sign In"}</button>
+        </form>
+        <div style={{textAlign:"center",marginTop:20,fontSize:13,color:"var(--ink3)"}}>
+          No account? <a style={{color:"var(--pri)",cursor:"pointer",fontWeight:600}} onClick={()=>go("register")}>Register</a>
+          <br/><a style={{color:"var(--ink4)",cursor:"pointer",marginTop:4,display:"inline-block"}} onClick={()=>go("landing")}>&larr; Home</a>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-const ADash=()=>{const[s,sS]=useState(null);const[ld,sL]=useState(true);useEffect(()=>{api('/api/analytics/overview').then(d=>{sS(d);sL(false)})},[]);if(ld)return<div className="ld"><div className="spr"/></div>;return<div className="anim"><h1 style={{fontSize:22,marginBottom:14}}>Dashboard</h1><div className="g g4" style={{marginBottom:14}}><div className="st"><div className="st-l">Today</div><div className="st-v">{s.today_bookings}</div></div><div className="st sg"><div className="st-l">Month Rev</div><div className="st-v" style={{fontSize:18}}>GH₵{s.month_rev.toFixed(0)}</div></div><div className="st sr"><div className="st-l">Pending</div><div className="st-v">{s.pending}</div></div><div className="st sw"><div className="st-l">Occupancy</div><div className="st-v">{s.occupancy}%</div></div></div><div className="g g4" style={{marginBottom:14}}><div className="st"><div className="st-l">Facilities</div><div className="st-v">{s.total_facilities}</div></div><div className="st"><div className="st-l">Upcoming</div><div className="st-v">{s.upcoming}</div></div><div className="st sg"><div className="st-l">Total Rev</div><div className="st-v" style={{fontSize:18}}>GH₵{s.total_rev.toFixed(0)}</div></div><div className="st"><div className="st-l">Users</div><div className="st-v">{s.total_users}</div></div></div><div className="g g2" style={{marginBottom:14}}><div className="crd"><div className="crd-h"><h3>🏆 Popular</h3></div>{s.popular.length===0?<p style={{color:'var(--ink4)',fontSize:12}}>No data</p>:s.popular.map((f,i)=><div key={i} style={{display:'flex',justifyContent:'space-between',padding:'5px 0',borderBottom:'1px solid var(--brd)',fontSize:12}}><span>{i+1}. {f.name}</span><span className="tg t-ok">{f.cnt}</span></div>)}</div><div className="crd"><div className="crd-h"><h3>📊 Trends</h3></div><div style={{display:'flex',alignItems:'flex-end',gap:5,height:80}}>{s.trends.map((t,i)=>{const mx=Math.max(...s.trends.map(x=>x.bookings),1);return<div key={i} style={{flex:1,textAlign:'center'}}><div style={{height:Math.max(4,(t.bookings/mx)*65),background:'var(--pri)',borderRadius:'3px 3px 0 0'}}/><div style={{fontSize:9,color:'var(--ink4)',marginTop:2}}>{t.short}</div></div>})}</div></div></div><div className="crd"><div className="crd-h"><h3>📋 Recent</h3></div><div className="tw"><table><thead><tr><th>Ref</th><th>Facility</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead><tbody>{s.recent.slice(0,8).map(b=><tr key={b.id}><td style={{fontFamily:'monospace',fontSize:10,fontWeight:700}}>{b.ref}</td><td>{b.fac_name}</td><td>{b.booking_date}</td><td style={{fontWeight:600}}>GH₵{(b.final_amount||0).toFixed(2)}</td><td><span className={"tg "+(b.status==='confirmed'?'t-ok':b.status==='cancelled'?'t-err':'t-w')}>{b.status}</span></td></tr>)}</tbody></table></div></div></div>};
+/* ============ REGISTER ============ */
+const Register=()=>{
+  const{go,login,toast}=useContext(X);
+  const[f,sF]=useState({name:"",email:"",password:"",phone:"",organization:""});
+  const[ld,sL]=useState(false);
+  const sub=async ev=>{
+    ev.preventDefault();sL(true);
+    try{const d=await api("/api/auth/register",{method:"POST",body:f});login(d.user,d.token);toast("Account created!","ok");go("u-dash")}catch(err){toast(err.message,"err")}
+    sL(false);
+  };
+  return(
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#0f0d23,#1e1b4b)"}}>
+      <div className="crd anim" style={{width:440,padding:36}}>
+        <div style={{textAlign:"center",marginBottom:24}}>
+          <h2 style={{fontSize:24}}>Create Account</h2>
+          <p style={{color:"var(--ink3)",fontSize:13,marginTop:4}}>Join RCEES Facilities</p>
+        </div>
+        <form onSubmit={sub}>
+          <div className="fg"><label className="fl">Full Name</label><input className="fi" value={f.name} onChange={e=>sF({...f,name:e.target.value})} required/></div>
+          <div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={f.email} onChange={e=>sF({...f,email:e.target.value})} required/></div>
+          <div className="fg"><label className="fl">Password</label><input className="fi" type="password" value={f.password} onChange={e=>sF({...f,password:e.target.value})} required/></div>
+          <div className="g g2">
+            <div className="fg"><label className="fl">Phone</label><input className="fi" value={f.phone} onChange={e=>sF({...f,phone:e.target.value})}/></div>
+            <div className="fg"><label className="fl">Organization</label><input className="fi" value={f.organization} onChange={e=>sF({...f,organization:e.target.value})}/></div>
+          </div>
+          <button className="bt bt-p" type="submit" disabled={ld} style={{width:"100%",justifyContent:"center",height:44}}>{ld?<span className="spr"/>:"Create Account"}</button>
+        </form>
+        <div style={{textAlign:"center",marginTop:16,fontSize:13,color:"var(--ink3)"}}>
+          Have an account? <a style={{color:"var(--pri)",cursor:"pointer"}} onClick={()=>go("login")}>Sign in</a> {" \u00B7 "} <a style={{color:"var(--ink4)",cursor:"pointer"}} onClick={()=>go("landing")}>Home</a>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-const ABk=()=>{const{toast}=useContext(X);const[bks,sB]=useState([]);const[tot,sT]=useState(0);const[fl,sFL]=useState('');const[q,sQ]=useState('');const[ld,sL]=useState(true);const[rjm,sRjm]=useState(null);const[rjr,sRjr]=useState('');const load=()=>{let u='/api/bookings?limit=100';if(fl)u+='&status='+fl;if(q)u+='&search='+q;api(u).then(d=>{sB(d.items);sT(d.total);sL(false)})};useEffect(load,[fl,q]);const approve=async id=>{await api('/api/bookings/'+id+'/approve',{method:'POST',body:{approved_by:'admin'}});toast('Approved! Email sent.','ok');load()};const reject=async()=>{if(!rjm)return;await api('/api/bookings/'+rjm+'/reject',{method:'POST',body:{reason:rjr}});toast('Rejected','inf');sRjm(null);sRjr('');load()};const act=async(id,st)=>{await api('/api/bookings/'+id,{method:'PUT',body:{status:st}});toast(st,'ok');load()};return<div className="anim"><h1 style={{fontSize:20,marginBottom:14}}>Bookings ({tot})</h1><div style={{display:'flex',gap:6,marginBottom:12}}><input className="fi" style={{width:200}} placeholder="Search..." value={q} onChange={e=>sQ(e.target.value)}/><select className="fi" style={{width:130}} value={fl} onChange={e=>sFL(e.target.value)}><option value="">All</option>{['pending','confirmed','cancelled','completed','rejected'].map(s=><option key={s}>{s}</option>)}</select></div>{ld?<div className="ld"><div className="spr"/></div>:<div className="crd"><div className="tw"><table><thead><tr><th>Ref</th><th>Facility</th><th>Title</th><th>By</th><th>Date</th><th>Time</th><th>Amount</th><th>Status</th><th>Pay</th><th>Actions</th></tr></thead><tbody>{bks.map(b=><tr key={b.id}><td style={{fontFamily:'monospace',fontSize:10,fontWeight:700}}>{b.ref}</td><td style={{fontWeight:600,fontSize:12}}>{b.fac_name}</td><td>{b.title}</td><td style={{fontSize:11}}>{b.guest_name||'User'}{b.is_walkin?<span className="tg t-p" style={{marginLeft:3}}>Walk-in</span>:null}</td><td>{b.booking_date}</td><td>{b.start_time}–{b.end_time}</td><td style={{fontWeight:600}}>GH₵{(b.final_amount||0).toFixed(2)}</td><td><span className={"tg "+(b.status==='confirmed'?'t-ok':b.status==='cancelled'||b.status==='rejected'?'t-err':'t-w')}>{b.status}</span></td><td><span className={"tg "+(b.pay_status==='paid'?'t-ok':'t-w')}>{b.pay_status}</span></td><td><div style={{display:'flex',gap:3}}>{b.status==='pending'&&<><button className="bt bt-ok bt-sm" onClick={()=>approve(b.id)}>✓ Approve</button><button className="bt bt-d bt-sm" onClick={()=>sRjm(b.id)}>✕</button></>}{b.status==='confirmed'&&<button className="bt bt-s bt-sm" onClick={()=>act(b.id,'completed')}>Done</button>}</div></td></tr>)}</tbody></table></div></div>}<Modal open={!!rjm} close={()=>sRjm(null)} title="Reject Booking" footer={<><button className="bt bt-s" onClick={()=>sRjm(null)}>Cancel</button><button className="bt bt-d" onClick={reject}>Reject & Notify</button></>}><div className="fg"><label className="fl">Reason (sent to applicant)</label><textarea className="fi" value={rjr} onChange={e=>sRjr(e.target.value)} placeholder="Why was this rejected?" rows={3}/></div></Modal></div>};
+/* ============ BROWSE ============ */
+const Browse=()=>{
+  const{go}=useContext(X);
+  const[facs,sF]=useState([]);const[cats,sC]=useState([]);const[q,sQ]=useState("");const[cat,sCat]=useState("");const[ld,sL]=useState(true);
+  useEffect(()=>{api("/api/facilities").then(f=>{sF(f);sL(false)});api("/api/categories").then(sC)},[]);
+  const fl=facs.filter(f=>(f.name+" "+(f.building||"")).toLowerCase().includes(q.toLowerCase())&&(!cat||f.category_id===cat));
+  return(
+    <div style={{maxWidth:1200,margin:"0 auto",padding:"28px 24px"}}>
+      <button className="bt bt-g bt-sm" onClick={()=>go("landing")}>&larr; Home</button>
+      <div style={{margin:"12px 0 24px"}}>
+        <h1 style={{fontSize:28,letterSpacing:-0.5}}>Browse Facilities</h1>
+        <p style={{color:"var(--ink3)",fontSize:14,marginTop:4}}>{facs.length} spaces at RCEES</p>
+      </div>
+      <div style={{display:"flex",gap:10,marginBottom:20,flexWrap:"wrap"}}>
+        <input className="fi" style={{maxWidth:280}} placeholder="Search facilities..." value={q} onChange={e=>sQ(e.target.value)}/>
+        <select className="fi" style={{maxWidth:200}} value={cat} onChange={e=>sCat(e.target.value)}>
+          <option value="">All Categories</option>
+          {cats.map(c=><option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
+        </select>
+      </div>
+      {ld?<div className="ld"><div className="spr"/></div>:
+        <div className="g g3">
+          {fl.map(f=>{
+            const m=JSON.parse(f.media||"[]");
+            return(
+              <div key={f.id} className="fc" onClick={()=>{window.__fid=f.id;go("detail")}}>
+                <div className="fc-im" style={m.length?{backgroundImage:"url("+m[0].url+")"}:{}}>
+                  {!m.length&&<span>{CI[f.cat_name]||"\u{1F3E2}"}</span>}
+                  <span className="fc-ct">{f.cat_name}</span>
+                </div>
+                <div className="fc-bd">
+                  <div className="fc-nm">{f.name}</div>
+                  <div className="fc-ds">{f.short_desc}</div>
+                  <div className="fc-mt"><span>{"\u{1F465}"} {f.capacity}</span><span>{"\u{1F4CD}"} {f.building}</span></div>
+                  <div style={{marginTop:8}}>
+                    <div className="am-l">{JSON.parse(f.amenities||"[]").slice(0,3).map((a,i)=><span key={i} className="am">{a}</span>)}</div>
+                  </div>
+                  <div className="fc-pr">GH₵{f.hourly_rate}<small>/hr</small> <span style={{fontSize:12,color:"var(--ink4)",marginLeft:8}}>Half: GH₵{f.half_day_rate}</span></div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      }
+    </div>
+  );
+};
 
-const AInv=()=>{const[invs,sI]=useState([]);const[ld,sL]=useState(true);useEffect(()=>{api('/api/invoices').then(d=>{sI(d);sL(false)})},[]);return<div className="anim"><h1 style={{fontSize:20,marginBottom:14}}>Invoices & Receipts ({invs.length})</h1>{ld?<div className="ld"><div className="spr"/></div>:invs.length===0?<div className="crd" style={{textAlign:'center',padding:36}}><p style={{fontSize:32,marginBottom:8}}>🧾</p><p style={{color:'var(--ink3)'}}>No invoices yet. They are generated automatically when bookings are created or walk-ins registered.</p></div>:<div className="crd"><div className="tw"><table><thead><tr><th>Invoice #</th><th>Type</th><th>Booking</th><th>Issued To</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>{invs.map(inv=><tr key={inv.id}><td><span className="inv-b">{inv.invoice_no}</span></td><td><span className={"tg "+(inv.invoice_type==='receipt'?'t-ok':'t-p')}>{inv.invoice_type}</span></td><td style={{fontFamily:'monospace',fontSize:10}}>{inv.booking_ref}</td><td style={{fontSize:12}}>{inv.issued_to_name}<br/><span style={{color:'var(--ink4)',fontSize:10}}>{inv.issued_to_email}</span></td><td style={{fontWeight:700}}>GH₵{inv.total.toFixed(2)}</td><td><span className={"tg "+(inv.status==='paid'?'t-ok':inv.status==='issued'?'t-w':'t-n')}>{inv.status}</span></td><td style={{fontSize:11}}>{(inv.issued_at||'').slice(0,10)}</td><td><a href={'/api/invoices/'+inv.id+'/html'} target="_blank" className="bt bt-s bt-sm">🖨️ Print</a></td></tr>)}</tbody></table></div></div>}</div>};
+/* ============ DETAIL / BOOKING ============ */
+const Detail=()=>{
+  const{go,user,toast}=useContext(X);
+  const[fac,sF]=useState(null);
+  const[dt,sDt]=useState(new Date().toISOString().split("T")[0]);
+  const[sd,sSD]=useState(null);
+  const[ss,sSS]=useState([]);
+  const[eq,sEq]=useState([]);
+  const[se,sSE]=useState([]);
+  const[step,sSt]=useState(1);
+  const[res,sRes]=useState(null);
+  const[fm,sFm]=useState({title:"",guest_name:"",guest_email:"",guest_phone:"",guest_org:"",attendees:1,special_req:"",discount_code:"",event_type:"general"});
+  const[pm,sPm]=useState("");
+  const[di,sDi]=useState(null);
+  const[ld,sL]=useState(true);
+  const fid=window.__fid;
 
-const AWalk=()=>{const{toast}=useContext(X);const[facs,sF]=useState([]);const[fm,sFm]=useState({facility_id:'',guest_name:'',guest_email:'',guest_phone:'',guest_org:'',title:'Walk-in Booking',booking_date:new Date().toISOString().split('T')[0],start_time:'08:00',end_time:'09:00',attendees:1,pay_method:'cash'});const[res,sRes]=useState(null);useEffect(()=>{api('/api/facilities').then(sF)},[]);const hrs=['07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00'];const submit=async()=>{try{const r=await api('/api/bookings/walkin',{method:'POST',body:fm});sRes(r);toast('Walk-in registered!','ok')}catch(e){toast(e.message,'err')}};return<div className="anim"><h1 style={{fontSize:20,marginBottom:4}}>Walk-in Registration</h1><p style={{color:'var(--ink3)',fontSize:12,marginBottom:16}}>Register on-site visitors. Auto-confirmed with receipt.</p>{res?<div className="crd" style={{maxWidth:480}}><div style={{textAlign:'center',marginBottom:14}}><div style={{fontSize:44,marginBottom:6}}>✅</div><h3 style={{fontSize:17}}>Registered!</h3></div><div style={{fontSize:12,marginBottom:12}}><div style={{marginBottom:3}}><strong>Ref:</strong> <span className="inv-b">{res.ref}</span></div><div style={{marginBottom:3}}><strong>Facility:</strong> {res.fac_name}</div><div style={{marginBottom:3}}><strong>Date:</strong> {res.booking_date} · {res.start_time}–{res.end_time}</div><div><strong>Amount:</strong> GH₵{res.final_amount?.toFixed(2)}</div></div><div style={{display:'flex',gap:6}}><button className="bt bt-p" onClick={()=>sRes(null)}>Register Another</button><button className="bt bt-s" onClick={()=>{api('/api/invoices?booking_id='+res.id).then(d=>{if(d.length>0)window.open('/api/invoices/'+d[0].id+'/html','_blank');else toast('No receipt yet','inf')})}}>🖨️ Print Receipt</button></div></div>:<div className="crd" style={{maxWidth:560}}><div className="fg"><label className="fl">Facility *</label><select className="fi" value={fm.facility_id} onChange={e=>sFm({...fm,facility_id:e.target.value})}><option value="">Select...</option>{facs.map(f=><option key={f.id} value={f.id}>{f.name} (GH₵{f.hourly_rate}/hr)</option>)}</select></div><div className="g g2"><div className="fg"><label className="fl">Guest Name *</label><input className="fi" value={fm.guest_name} onChange={e=>sFm({...fm,guest_name:e.target.value})}/></div><div className="fg"><label className="fl">Phone</label><input className="fi" value={fm.guest_phone} onChange={e=>sFm({...fm,guest_phone:e.target.value})}/></div></div><div className="g g2"><div className="fg"><label className="fl">Email</label><input className="fi" value={fm.guest_email} onChange={e=>sFm({...fm,guest_email:e.target.value})}/></div><div className="fg"><label className="fl">Organization</label><input className="fi" value={fm.guest_org} onChange={e=>sFm({...fm,guest_org:e.target.value})}/></div></div><div className="g g2"><div className="fg"><label className="fl">Date</label><input className="fi" type="date" value={fm.booking_date} onChange={e=>sFm({...fm,booking_date:e.target.value})}/></div><div className="fg"><label className="fl">Attendees</label><input className="fi" type="number" min={1} value={fm.attendees} onChange={e=>sFm({...fm,attendees:parseInt(e.target.value)||1})}/></div></div><div className="g g2"><div className="fg"><label className="fl">Start</label><select className="fi" value={fm.start_time} onChange={e=>sFm({...fm,start_time:e.target.value})}>{hrs.map(h=><option key={h}>{h}</option>)}</select></div><div className="fg"><label className="fl">End</label><select className="fi" value={fm.end_time} onChange={e=>sFm({...fm,end_time:e.target.value})}>{hrs.map(h=><option key={h}>{h}</option>)}</select></div></div><div className="fg"><label className="fl">Purpose</label><input className="fi" value={fm.title} onChange={e=>sFm({...fm,title:e.target.value})}/></div><div className="fg"><label className="fl">Payment</label><select className="fi" value={fm.pay_method} onChange={e=>sFm({...fm,pay_method:e.target.value})}><option value="cash">Cash</option><option value="momo">Mobile Money</option><option value="card">Card</option></select></div><button className="bt bt-p bt-lg" style={{width:'100%',justifyContent:'center'}} disabled={!fm.facility_id||!fm.guest_name} onClick={submit}>Register & Generate Receipt</button></div>}</div>};
+  useEffect(()=>{if(fid){api("/api/facilities/"+fid).then(f=>{sF(f);sL(false)});api("/api/equipment").then(sEq)}},[fid]);
+  useEffect(()=>{if(fid&&dt){api("/api/facilities/"+fid+"/slots?date="+dt).then(sSD);sSS([])}},[fid,dt]);
 
-const AFc=()=>{const{toast}=useContext(X);const[facs,sF]=useState([]);const[cats,sC]=useState([]);const[show,sS]=useState(false);const[ld,sL]=useState(true);const[fm,sFm]=useState({name:'',category_id:'',capacity:10,description:'',short_desc:'',hourly_rate:0,half_day_rate:0,full_day_rate:0,location:'',building:'',floor:'',amenities:[],requires_approval:0});const[na,sNA]=useState('');const load=()=>api('/api/facilities?active_only=false').then(f=>{sF(f);sL(false)});useEffect(()=>{load();api('/api/categories').then(sC)},[]);const add=async()=>{try{await api('/api/facilities',{method:'POST',body:fm});toast('Created!','ok');sS(false);load()}catch(e){toast(e.message,'err')}};const tog=async(id,cur)=>{await api('/api/facilities/'+id,{method:'PUT',body:{is_active:cur?0:1}});load()};const upm=async id=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';inp.onchange=async e=>{const f=e.target.files[0];if(!f)return;const fd=new FormData();fd.append('file',f);try{await api('/api/facilities/'+id+'/media',{method:'POST',body:fd});toast('Uploaded!','ok');load()}catch(err){toast('Failed','err')}};inp.click()};return<div className="anim"><div style={{display:'flex',justifyContent:'space-between',marginBottom:14}}><h1 style={{fontSize:20}}>Facilities</h1><button className="bt bt-p" onClick={()=>sS(true)}>+ Onboard</button></div>{ld?<div className="ld"><div className="spr"/></div>:<div className="crd"><div className="tw"><table><thead><tr><th>Name</th><th>Category</th><th>Cap</th><th>Rate</th><th>Approval</th><th>Status</th><th>Actions</th></tr></thead><tbody>{facs.map(f=><tr key={f.id}><td style={{fontWeight:600}}>{f.name}</td><td>{f.cat_name}</td><td>{f.capacity}</td><td>GH₵{f.hourly_rate}</td><td>{f.requires_approval?<span className="tg t-w">Required</span>:<span className="tg t-n">Auto</span>}</td><td><span className={"tg "+(f.is_active?'t-ok':'t-err')}>{f.is_active?'Active':'Off'}</span></td><td><div style={{display:'flex',gap:3}}><button className="bt bt-s bt-sm" onClick={()=>upm(f.id)}>📤</button><button className="bt bt-s bt-sm" onClick={()=>tog(f.id,f.is_active)}>{f.is_active?'🔒':'🔓'}</button></div></td></tr>)}</tbody></table></div></div>}<Modal open={show} close={()=>sS(false)} title="Onboard Facility" wide footer={<><button className="bt bt-s" onClick={()=>sS(false)}>Cancel</button><button className="bt bt-p" onClick={add}>Create</button></>}><div className="g g2"><div className="fg"><label className="fl">Name *</label><input className="fi" value={fm.name} onChange={e=>sFm({...fm,name:e.target.value})}/></div><div className="fg"><label className="fl">Category</label><select className="fi" value={fm.category_id} onChange={e=>sFm({...fm,category_id:e.target.value})}><option value="">Select...</option>{cats.map(c=><option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}</select></div><div className="fg"><label className="fl">Capacity</label><input className="fi" type="number" value={fm.capacity} onChange={e=>sFm({...fm,capacity:+e.target.value||0})}/></div><div className="fg"><label className="fl">Rate/hr</label><input className="fi" type="number" value={fm.hourly_rate} onChange={e=>sFm({...fm,hourly_rate:+e.target.value||0})}/></div></div><div className="fg"><label className="fl">Description</label><textarea className="fi" value={fm.description} onChange={e=>sFm({...fm,description:e.target.value})}/></div><div className="fg"><label className="fl">Amenities</label><div style={{display:'flex',gap:4,marginBottom:4}}><input className="fi" value={na} onChange={e=>sNA(e.target.value)} placeholder="Type + Enter" onKeyDown={e=>{if(e.key==='Enter'&&na){sFm({...fm,amenities:[...fm.amenities,na]});sNA('')}}}/><button className="bt bt-s bt-sm" onClick={()=>{if(na){sFm({...fm,amenities:[...fm.amenities,na]});sNA('')}}}>Add</button></div><div className="am-l">{fm.amenities.map((a,i)=><span key={i} className="am" style={{cursor:'pointer'}} onClick={()=>sFm({...fm,amenities:fm.amenities.filter((_,j)=>j!==i)})}>{a} ✕</span>)}</div></div><label style={{fontSize:12,cursor:'pointer'}}><input type="checkbox" checked={fm.requires_approval} onChange={e=>sFm({...fm,requires_approval:e.target.checked?1:0})}/> Require approval</label></Modal></div>};
+  const tog=s=>{if(!s.available)return;const ex=ss.find(x=>x.start===s.start);if(ex)sSS(ss.filter(x=>x.start!==s.start));else sSS([...ss,s].sort((a,b)=>a.start.localeCompare(b.start)))};
+  const con=ss.length<=1||ss.every((s,i)=>i===0||s.start===ss[i-1].end);
+  const hrs=ss.length;
+  const bp=useMemo(()=>{
+    if(!fac||hrs===0)return 0;
+    const r=sd?.is_weekend?fac.hourly_rate*fac.weekend_multiplier:fac.hourly_rate;
+    if(hrs>=8&&fac.full_day_rate>0){let p=fac.full_day_rate;if(sd?.is_weekend)p*=fac.weekend_multiplier;return p}
+    if(hrs>=4&&fac.half_day_rate>0){let p=fac.half_day_rate;if(sd?.is_weekend)p*=fac.weekend_multiplier;if(hrs>4)p+=(hrs-4)*r;return p}
+    return hrs*r;
+  },[fac,hrs,sd]);
+  const ec=se.reduce((s,eid)=>{const e=eq.find(x=>x.id===eid);return s+(e?e.hourly_rate*hrs:0)},0);
+  const sub=bp+ec;
+  const da=di?.valid?(di.discount.dtype==="percentage"?sub*(di.discount.value/100):Math.min(di.discount.value,sub)):0;
+  const cd=di?.valid&&di.discount.max_discount>0?Math.min(da,di.discount.max_discount):da;
+  const tot=Math.max(0,sub-cd);
 
-const AMt=()=>{const{toast}=useContext(X);const[items,sI]=useState([]);const[facs,sF]=useState([]);const[show,sS]=useState(false);const[ld,sL]=useState(true);const[fm,sFm]=useState({facility_id:'',title:'',mtype:'routine',priority:'medium',start_date:'',end_date:'',cost_est:0,blocks_bookings:1});useEffect(()=>{api('/api/maintenance').then(m=>{sI(m);sL(false)});api('/api/facilities?active_only=false').then(sF)},[]);const add=async()=>{try{await api('/api/maintenance',{method:'POST',body:fm});toast('Scheduled!','ok');sS(false);api('/api/maintenance').then(sI)}catch(e){toast(e.message,'err')}};const upd=async(id,st)=>{await api('/api/maintenance/'+id,{method:'PUT',body:{status:st}});api('/api/maintenance').then(sI)};return<div className="anim"><div style={{display:'flex',justifyContent:'space-between',marginBottom:14}}><h1 style={{fontSize:20}}>Maintenance</h1><button className="bt bt-p" onClick={()=>sS(true)}>+ Schedule</button></div>{ld?<div className="ld"><div className="spr"/></div>:<div className="crd"><div className="tw"><table><thead><tr><th>Facility</th><th>Title</th><th>Type</th><th>Priority</th><th>Dates</th><th>Status</th><th>Actions</th></tr></thead><tbody>{items.map(m=><tr key={m.id}><td style={{fontWeight:600}}>{m.fac_name}</td><td>{m.title}</td><td><span className="tg t-n">{m.mtype}</span></td><td><span className={"tg "+(m.priority==='high'||m.priority==='critical'?'t-err':'t-w')}>{m.priority}</span></td><td style={{fontSize:11}}>{(m.start_date||'').slice(0,10)} → {(m.end_date||'').slice(0,10)}</td><td><span className={"tg "+(m.status==='completed'?'t-ok':m.status==='in_progress'?'t-w':'t-p')}>{m.status}</span></td><td>{m.status==='scheduled'&&<button className="bt bt-s bt-sm" onClick={()=>upd(m.id,'in_progress')}>Start</button>}{m.status==='in_progress'&&<button className="bt bt-p bt-sm" onClick={()=>upd(m.id,'completed')}>Done</button>}</td></tr>)}</tbody></table></div></div>}<Modal open={show} close={()=>sS(false)} title="Schedule Maintenance" footer={<><button className="bt bt-s" onClick={()=>sS(false)}>Cancel</button><button className="bt bt-p" onClick={add}>Schedule</button></>}><div className="fg"><label className="fl">Facility</label><select className="fi" value={fm.facility_id} onChange={e=>sFm({...fm,facility_id:e.target.value})}><option value="">Select...</option>{facs.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}</select></div><div className="fg"><label className="fl">Title</label><input className="fi" value={fm.title} onChange={e=>sFm({...fm,title:e.target.value})}/></div><div className="g g2"><div className="fg"><label className="fl">Start</label><input className="fi" type="date" value={fm.start_date} onChange={e=>sFm({...fm,start_date:e.target.value})}/></div><div className="fg"><label className="fl">End</label><input className="fi" type="date" value={fm.end_date} onChange={e=>sFm({...fm,end_date:e.target.value})}/></div></div></Modal></div>};
+  const vDisc=async()=>{
+    if(!fm.discount_code)return;
+    try{const r=await api("/api/discounts/validate",{method:"POST",body:{code:fm.discount_code,hours:hrs,amount:sub}});sDi(r);toast(r.valid?"Discount applied!":r.message,r.valid?"ok":"err")}catch(e){toast("Invalid code","err")}
+  };
+  const book=async()=>{
+    if(!con){toast("Select contiguous slots","err");return}
+    try{
+      const bd={facility_id:fid,title:fm.title,event_type:fm.event_type,booking_date:dt,start_time:ss[0].start,end_time:ss[ss.length-1].end,attendees:fm.attendees,special_req:fm.special_req,discount_code:fm.discount_code,equipment:se,pay_method:pm};
+      if(user)bd.user_id=user.id;else{bd.guest_name=fm.guest_name;bd.guest_email=fm.guest_email;bd.guest_phone=fm.guest_phone;bd.guest_org=fm.guest_org}
+      const r=await api("/api/bookings",{method:"POST",body:bd});sRes(r);sSt(4);toast("Booking submitted!","ok");
+    }catch(err){toast(err.message,"err")}
+  };
 
-const ADc=()=>{const{toast}=useContext(X);const[items,sI]=useState([]);const[show,sS]=useState(false);const[fm,sFm]=useState({code:'',name:'',dtype:'percentage',value:0,min_hours:0,max_uses:0});useEffect(()=>{api('/api/discounts').then(sI)},[]);const add=async()=>{try{await api('/api/discounts',{method:'POST',body:fm});toast('Created!','ok');sS(false);api('/api/discounts').then(sI)}catch(e){toast(e.message,'err')}};const tog=async(id,a)=>{await api('/api/discounts/'+id,{method:'PUT',body:{is_active:a?0:1}});api('/api/discounts').then(sI)};return<div className="anim"><div style={{display:'flex',justifyContent:'space-between',marginBottom:14}}><h1 style={{fontSize:20}}>Discounts</h1><button className="bt bt-p" onClick={()=>sS(true)}>+ Create</button></div><div className="crd"><div className="tw"><table><thead><tr><th>Code</th><th>Name</th><th>Value</th><th>Min Hrs</th><th>Uses</th><th>Status</th><th>Actions</th></tr></thead><tbody>{items.map(d=><tr key={d.id}><td><span className="inv-b">{d.code}</span></td><td>{d.name}</td><td>{d.dtype==='percentage'?d.value+'%':'GH₵'+d.value}</td><td>{d.min_hours||'—'}</td><td>{d.times_used}{d.max_uses>0?'/'+d.max_uses:'/∞'}</td><td><span className={"tg "+(d.is_active?'t-ok':'t-err')}>{d.is_active?'On':'Off'}</span></td><td><button className="bt bt-s bt-sm" onClick={()=>tog(d.id,d.is_active)}>{d.is_active?'Disable':'Enable'}</button></td></tr>)}</tbody></table></div></div><Modal open={show} close={()=>sS(false)} title="Create Discount" footer={<><button className="bt bt-s" onClick={()=>sS(false)}>Cancel</button><button className="bt bt-p" onClick={add}>Create</button></>}><div className="g g2"><div className="fg"><label className="fl">Code</label><input className="fi" value={fm.code} onChange={e=>sFm({...fm,code:e.target.value.toUpperCase()})}/></div><div className="fg"><label className="fl">Name</label><input className="fi" value={fm.name} onChange={e=>sFm({...fm,name:e.target.value})}/></div><div className="fg"><label className="fl">Type</label><select className="fi" value={fm.dtype} onChange={e=>sFm({...fm,dtype:e.target.value})}><option value="percentage">%</option><option value="fixed">GH₵</option></select></div><div className="fg"><label className="fl">Value</label><input className="fi" type="number" value={fm.value} onChange={e=>sFm({...fm,value:+e.target.value||0})}/></div></div></Modal></div>};
+  if(ld)return <div className="ld"><div className="spr"/></div>;
+  if(!fac)return <div className="ld">Not found</div>;
+  const media=JSON.parse(fac.media||"[]");const amen=JSON.parse(fac.amenities||"[]");const slots=sd?.slots||[];
 
-const AUs=()=>{const{toast}=useContext(X);const[users,sU]=useState([]);const[q,sQ]=useState('');const load=()=>api('/api/users'+(q?'?search='+q:'')).then(sU);useEffect(load,[q]);return<div className="anim"><h1 style={{fontSize:20,marginBottom:14}}>Users</h1><input className="fi" style={{maxWidth:260,marginBottom:12}} placeholder="Search..." value={q} onChange={e=>sQ(e.target.value)}/><div className="crd"><div className="tw"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Org</th><th>Status</th><th>Actions</th></tr></thead><tbody>{users.map(u=><tr key={u.id}><td style={{fontWeight:600}}>{u.name}</td><td style={{fontSize:11}}>{u.email}</td><td><span className={"tg "+(u.role==='admin'?'t-ok':'t-n')}>{u.role}</span></td><td style={{fontSize:11}}>{u.organization||'—'}</td><td><span className={"tg "+(u.is_active?'t-ok':'t-err')}>{u.is_active?'Active':'Off'}</span></td><td><select className="fi" style={{width:75,padding:'2px',fontSize:10}} value={u.role} onChange={async e=>{await api('/api/users/'+u.id,{method:'PUT',body:{role:e.target.value}});toast('Updated','ok');load()}}>{['user','staff','manager','admin'].map(r=><option key={r}>{r}</option>)}</select></td></tr>)}</tbody></table></div></div></div>};
+  return(
+    <div style={{maxWidth:1100,margin:"0 auto",padding:"28px 24px"}}>
+      <button className="bt bt-g bt-sm" onClick={()=>go("browse")} style={{marginBottom:14}}>&larr; Back</button>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 360px",gap:28,alignItems:"start"}}>
+        <div className="anim">
+          <div style={{height:280,borderRadius:"var(--r3)",overflow:"hidden",marginBottom:18,background:"linear-gradient(135deg,var(--pri-bg),var(--bg2))",display:"flex",alignItems:"center",justifyContent:"center",fontSize:60,backgroundSize:"cover",backgroundPosition:"center",...(media.length?{backgroundImage:"url("+media[0].url+")"}:{})}}>{!media.length&&(CI[fac.cat_name]||"\u{1F3E2}")}</div>
+          <h1 style={{fontSize:28,marginBottom:6,letterSpacing:-0.5}}>{fac.name}</h1>
+          <div style={{display:"flex",gap:14,color:"var(--ink3)",fontSize:13,marginBottom:14,flexWrap:"wrap"}}>
+            <span>{"\u{1F4CD}"} {fac.location}</span><span>{"\u{1F465}"} {fac.capacity}</span><span>{"\u{1F3F7}"} {fac.cat_name}</span>
+          </div>
+          <p style={{color:"var(--ink2)",lineHeight:1.75,marginBottom:18,fontSize:14}}>{fac.description}</p>
+          <div className="am-l" style={{marginBottom:18}}>{amen.map((a,i)=><span key={i} className="am" style={{padding:"4px 12px"}}>{a}</span>)}</div>
+          <div className="g g3" style={{marginBottom:18}}>
+            <div className="st"><div className="st-l">Hourly</div><div className="st-v" style={{fontSize:20}}>GH₵{fac.hourly_rate}</div></div>
+            <div className="st sw"><div className="st-l">Half-Day</div><div className="st-v" style={{fontSize:20}}>GH₵{fac.half_day_rate}</div></div>
+            <div className="st sg"><div className="st-l">Full-Day</div><div className="st-v" style={{fontSize:20}}>GH₵{fac.full_day_rate}</div></div>
+          </div>
+        </div>
 
-const PayPage=()=>{const{toast}=useContext(X);const[bk,sBk]=useState(null);const[ld,sL]=useState(true);const[pm,sPm]=useState('');const[done,sDone]=useState(false);const tk=window.__payToken||'';useEffect(()=>{if(tk)api('/api/bookings/pay/'+tk).then(b=>{sBk(b);sL(false)}).catch(()=>sL(false))},[]);const pay=async()=>{try{await api('/api/payments/process',{method:'POST',body:{booking_id:bk.id,method:pm}});sDone(true);toast('Payment successful!','ok')}catch(e){toast(e.message,'err')}};if(ld)return<div className="ld"><div className="spr"/></div>;if(!bk)return<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}><div className="crd" style={{maxWidth:380,textAlign:'center',padding:28}}><div style={{fontSize:44}}>❌</div><h2 style={{fontSize:18}}>Invalid Payment Link</h2><p style={{color:'var(--ink3)',fontSize:12}}>This link may have expired.</p></div></div>;if(done)return<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center'}}><div className="crd" style={{maxWidth:400,textAlign:'center',padding:28}}><div style={{fontSize:44}}>✅</div><h2 style={{fontSize:18}}>Payment Complete!</h2><p style={{color:'var(--ink3)',fontSize:12,marginBottom:12}}>Booking <strong>{bk.ref}</strong> is confirmed and paid.</p><a href="/" className="bt bt-p">Back to RCEES</a></div></div>;return<div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'var(--bg)'}}><div className="crd" style={{maxWidth:440,padding:24}}><div style={{textAlign:'center',marginBottom:16}}><div className="s-ic" style={{margin:'0 auto 8px',width:42,height:42,fontSize:16}}>R</div><h2 style={{fontSize:18}}>Complete Payment</h2><p style={{color:'var(--ink3)',fontSize:11}}>Booking {bk.ref}</p></div><div style={{background:'var(--card2)',padding:12,borderRadius:'var(--r2)',marginBottom:14,fontSize:12}}><div><strong>Facility:</strong> {bk.fac_name}</div><div><strong>Date:</strong> {bk.booking_date} · {bk.start_time}–{bk.end_time}</div><div><strong>Amount:</strong> <span style={{fontSize:18,fontWeight:700,color:'var(--pri)',fontFamily:'var(--fh)'}}>GH₵{bk.final_amount?.toFixed(2)}</span></div></div><div className="fl">Payment Method</div><div className="pm-g">{[{id:'momo',l:'Mobile Money',i:'📱'},{id:'card',l:'Bank Card',i:'💳'},{id:'cash',l:'Office',i:'💵'}].map(p=><div key={p.id} className={"pm"+(pm===p.id?" psel":"")} onClick={()=>sPm(p.id)}><div className="pm-ic">{p.i}</div>{p.l}</div>)}</div><button className="bt bt-p bt-lg" style={{width:'100%',justifyContent:'center',marginTop:6}} disabled={!pm} onClick={pay}>Pay GH₵{bk.final_amount?.toFixed(2)}</button></div></div>};
+        <div className="crd anim" style={{position:"sticky",top:72}}>
+          {step===1&&<>
+            <h3 style={{fontSize:15,marginBottom:12}}>Select Date & Time</h3>
+            <Cal sel={dt} onSel={sDt}/>
+            <div style={{margin:"12px 0 8px",fontSize:12,color:"var(--ink3)"}}>Slots for <strong>{new Date(dt+"T12:00").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric"})}</strong>:</div>
+            <div className="sl-g">
+              {slots.map(s=>(
+                <div key={s.start} className={"sl "+(s.available?(ss.find(x=>x.start===s.start)?"sel":"av"):s.status==="maintenance"?"mnt":"bk")} onClick={()=>tog(s)}>
+                  {s.start}
+                  <div style={{fontSize:9,opacity:.6}}>GH₵{s.rate}</div>
+                </div>
+              ))}
+            </div>
+            {ss.length>0&&!con&&<p style={{color:"var(--err)",fontSize:11,marginTop:6}}>Select contiguous slots</p>}
+            {ss.length>0&&con&&(
+              <div style={{marginTop:12,padding:10,background:"var(--pri-bg)",borderRadius:"var(--r1)",fontSize:13}}>
+                <strong>{hrs}hr{hrs>1?"s":""}</strong>: {ss[0]?.start} - {ss[ss.length-1]?.end}
+                <div style={{fontWeight:700,fontSize:18,color:"var(--pri)",marginTop:4}}>GH₵{bp.toFixed(2)}</div>
+              </div>
+            )}
+            <button className="bt bt-p" style={{width:"100%",justifyContent:"center",marginTop:12}} disabled={!ss.length||!con} onClick={()=>sSt(2)}>Continue &rarr;</button>
+          </>}
 
-const Side=({pg,go,user,pend})=>{const isA=user?.role==='admin'||user?.role==='manager';const nav=isA?[{s:'Overview',items:[{id:'a-dash',l:'Dashboard',i:'📊'}]},{s:'Operations',items:[{id:'a-bk',l:'Bookings',i:'📅',b:pend||null},{id:'a-inv',l:'Invoices',i:'🧾'},{id:'a-walk',l:'Walk-in',i:'🚶'},{id:'a-fc',l:'Facilities',i:'🏢'},{id:'a-mt',l:'Maintenance',i:'🔧'},{id:'a-dc',l:'Discounts',i:'🏷️'},{id:'a-us',l:'Users',i:'👥'}]},{s:'Quick',items:[{id:'browse',l:'Browse & Book',i:'🔍'}]}]:[{s:'',items:[{id:'u-dash',l:'My Bookings',i:'📅'},{id:'browse',l:'Browse',i:'🔍'}]}];return<nav className="side"><div className="s-hd"><div className="s-ic">R</div><div><h2>RCEES</h2><small>Facilities</small></div></div><div className="s-nav">{nav.map(sec=><div key={sec.s}>{sec.s&&<div className="s-lb">{sec.s}</div>}{sec.items.map(it=><div key={it.id} className={"s-i"+(pg===it.id?" on":"")} onClick={()=>go(it.id)}><span className="ic">{it.i}</span>{it.l}{it.b&&<span className="bdg">{it.b}</span>}</div>)}</div>)}</div><div className="s-ft"><div className="s-i" onClick={()=>{localStorage.removeItem('rcees_auth');window.location.reload()}}><span className="ic">🚪</span>Sign Out</div></div></nav>};
+          {step===2&&<>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
+              <button className="bt bt-g bt-sm" onClick={()=>sSt(1)}>&larr;</button>
+              <h3 style={{fontSize:15}}>Details</h3>
+            </div>
+            <div className="fg"><label className="fl">Event Title *</label><input className="fi" value={fm.title} onChange={e=>sFm({...fm,title:e.target.value})}/></div>
+            <div className="g g2">
+              <div className="fg"><label className="fl">Type</label>
+                <select className="fi" value={fm.event_type} onChange={e=>sFm({...fm,event_type:e.target.value})}>
+                  {["general","meeting","lecture","workshop","seminar","conference","research","exam"].map(t=><option key={t}>{t}</option>)}
+                </select>
+              </div>
+              <div className="fg"><label className="fl">Attendees</label><input className="fi" type="number" min={1} max={fac.capacity} value={fm.attendees} onChange={e=>sFm({...fm,attendees:parseInt(e.target.value)||1})}/></div>
+            </div>
+            {!user&&<>
+              <div style={{fontSize:12,color:"var(--pri)",fontWeight:600,margin:"8px 0"}}>Your Details (for notifications)</div>
+              <div className="fg"><label className="fl">Name *</label><input className="fi" value={fm.guest_name} onChange={e=>sFm({...fm,guest_name:e.target.value})}/></div>
+              <div className="g g2">
+                <div className="fg"><label className="fl">Email *</label><input className="fi" type="email" value={fm.guest_email} onChange={e=>sFm({...fm,guest_email:e.target.value})}/></div>
+                <div className="fg"><label className="fl">Phone</label><input className="fi" value={fm.guest_phone} onChange={e=>sFm({...fm,guest_phone:e.target.value})}/></div>
+              </div>
+            </>}
+            <button className="bt bt-p" style={{width:"100%",justifyContent:"center"}} disabled={!fm.title||(!user&&(!fm.guest_name||!fm.guest_email))} onClick={()=>sSt(3)}>Review &rarr;</button>
+          </>}
 
-const App=()=>{const[pg,sPg]=useState('landing');const[user,sU]=useState(null);const[token,sT]=useState(null);const[toasts,sTs]=useState([]);const[pend,sP]=useState(0);
-useEffect(()=>{const s=localStorage.getItem('rcees_auth');if(s){try{const o=JSON.parse(s);sU(o.user);sT(o.token);sPg(o.user.role==='admin'||o.user.role==='manager'?'a-dash':'u-dash')}catch(e){}}const h=window.location.hash;if(h.startsWith('#pay/')){window.__payToken=h.replace('#pay/','');sPg('pay-page')}},[]);
-useEffect(()=>{if(user?.role==='admin'||user?.role==='manager')api('/api/bookings?status=pending&limit=100').then(d=>sP(d.total||0)).catch(()=>{})},[user,pg]);
-const login=(u,t)=>{sU(u);sT(t);localStorage.setItem('rcees_auth',JSON.stringify({user:u,token:t}))};
-const toast=(msg,type)=>{const id=Date.now();sTs(p=>[...p,{id,msg,type:type||'inf'}]);setTimeout(()=>sTs(p=>p.filter(t=>t.id!==id)),4000)};
-const go=p=>sPg(p);const ctx={pg,go,user,token,login,toast};
-const pub=['landing','login','register','browse','detail','guest','pay-page'].includes(pg);const li=!!user;
-const titles={'a-dash':'Dashboard','a-bk':'Bookings','a-inv':'Invoices','a-walk':'Walk-in','a-fc':'Facilities','a-mt':'Maintenance','a-dc':'Discounts','a-us':'Users','u-dash':'My Bookings',browse:'Browse'};
-const render=()=>{switch(pg){case 'landing':return<Landing/>;case 'login':return<Login/>;case 'register':return<Register/>;case 'browse':return<Browse/>;case 'detail':return<Detail/>;case 'guest':return<Guest/>;case 'u-dash':return<UDash/>;case 'a-dash':return<ADash/>;case 'a-bk':return<ABk/>;case 'a-inv':return<AInv/>;case 'a-walk':return<AWalk/>;case 'a-fc':return<AFc/>;case 'a-mt':return<AMt/>;case 'a-dc':return<ADc/>;case 'a-us':return<AUs/>;case 'pay-page':return<PayPage/>;default:return<Landing/>}};
-return<X.Provider value={ctx}><Toasts items={toasts} rm={id=>sTs(toasts.filter(t=>t.id!==id))}/>{pub||!li?render():<div className="app"><Side pg={pg} go={sPg} user={user} pend={pend}/><div className="mn"><div className="top"><h1>{titles[pg]||'RCEES'}</h1><div className="sp"/><div className="upill"><div className="uav">{user.name?.charAt(0)}</div><span>{user.name}</span><span className="tg t-ok" style={{marginLeft:3}}>{user.role}</span></div></div><div className="pg">{render()}</div></div></div>}</X.Provider>};
-ReactDOM.render(<App/>,document.getElementById('root'));
+          {step===3&&<>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
+              <button className="bt bt-g bt-sm" onClick={()=>sSt(2)}>&larr;</button>
+              <h3 style={{fontSize:15}}>Review & Submit</h3>
+            </div>
+            <div className="pb">
+              <div style={{marginBottom:10,fontSize:12,color:"var(--ink3)"}}>
+                <strong>{fac.name}</strong><br/>
+                {new Date(dt+"T12:00").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric",year:"numeric"})} {"\u00B7"} {ss[0]?.start} - {ss[ss.length-1]?.end}
+              </div>
+              <div className="pln"><span>Facility ({hrs}hr{hrs>1?"s":""})</span><span>GH₵{bp.toFixed(2)}</span></div>
+              {ec>0&&<div className="pln"><span>Equipment</span><span>GH₵{ec.toFixed(2)}</span></div>}
+              {cd>0&&<div className="pln" style={{color:"var(--ok)"}}><span>Discount</span><span>{"\u2212"}GH₵{cd.toFixed(2)}</span></div>}
+              <div className="pln ptot"><span>Total</span><span style={{color:"var(--pri)"}}>GH₵{tot.toFixed(2)}</span></div>
+            </div>
+            <div className="fg" style={{marginTop:12}}>
+              <label className="fl">Discount Code</label>
+              <div style={{display:"flex",gap:6}}>
+                <input className="fi" value={fm.discount_code} onChange={e=>sFm({...fm,discount_code:e.target.value})} placeholder="RCEES10" style={{flex:1}}/>
+                <button className="bt bt-s bt-sm" onClick={vDisc}>Apply</button>
+              </div>
+            </div>
+            {fac.requires_approval?
+              <div style={{background:"var(--warn-bg)",padding:"10px 14px",borderRadius:"var(--r1)",fontSize:12,color:"var(--warn-tx)",marginBottom:10}}>Requires admin approval. You will get an email with a payment link once approved.</div>:
+              <div style={{background:"var(--ok-bg)",padding:"10px 14px",borderRadius:"var(--r1)",fontSize:12,color:"var(--ok-tx)",marginBottom:10}}>Auto-confirmed. An invoice will be generated automatically.</div>
+            }
+            <button className="bt bt-p bt-lg" style={{width:"100%",justifyContent:"center"}} onClick={book}>Submit Booking</button>
+          </>}
+
+          {step===4&&res&&(
+            <div style={{textAlign:"center"}}>
+              <div style={{fontSize:48,marginBottom:10}}>{res.status==="confirmed"?"\u2705":"\u{1F4E8}"}</div>
+              <h3 style={{fontSize:18,marginBottom:6}}>{res.status==="confirmed"?"Confirmed!":"Submitted for Approval"}</h3>
+              <p style={{fontSize:12,color:"var(--ink3)",marginBottom:14}}>{res.status==="confirmed"?"Your booking is confirmed.":"You will receive an email once approved."}</p>
+              <div className="crd" style={{background:"var(--bg)",textAlign:"left",fontSize:13,padding:14,marginBottom:14,border:"1px solid var(--brd)"}}>
+                <div style={{marginBottom:4}}><strong>Ref:</strong> <span className="inv-b">{res.ref}</span></div>
+                <div style={{marginBottom:4}}><strong>Date:</strong> {res.booking_date} {"\u00B7"} {res.start_time} - {res.end_time}</div>
+                <div style={{marginBottom:4}}><strong>Status:</strong> <span className={"tg "+(res.status==="confirmed"?"t-ok":"t-w")}>{res.status}</span></div>
+                <div><strong>Amount:</strong> GH₵{res.final_amount?.toFixed(2)}</div>
+              </div>
+              <div style={{display:"flex",gap:8,justifyContent:"center"}}>
+                <button className="bt bt-p" onClick={()=>{sSt(1);sSS([]);sRes(null);sDi(null)}}>Book Another</button>
+                <button className="bt bt-s" onClick={()=>go(user?"u-dash":"landing")}>{user?"Dashboard":"Home"}</button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ============ GUEST ============ */
+const Guest=()=>{
+  const{go}=useContext(X);
+  const[facs,sF]=useState([]);const[q,sQ]=useState("");const[lr,sLR]=useState(null);
+  useEffect(()=>{api("/api/facilities").then(sF)},[]);
+  const lu=async()=>{
+    if(!q)return;
+    if(q.includes("@"))sLR({t:"l",d:await api("/api/bookings/guest/"+encodeURIComponent(q))});
+    else{try{sLR({t:"s",d:await api("/api/bookings/ref/"+q)})}catch(e){sLR({t:"l",d:[]})}}
+  };
+  return(
+    <div style={{maxWidth:900,margin:"0 auto",padding:"36px 24px"}}>
+      <button className="bt bt-g bt-sm" onClick={()=>go("landing")}>&larr; Home</button>
+      <h1 style={{fontSize:28,marginTop:10,marginBottom:6,letterSpacing:-0.5}}>Quick Guest Booking</h1>
+      <p style={{color:"var(--ink3)",fontSize:14,marginBottom:24}}>No account needed.</p>
+
+      <div className="crd" style={{marginBottom:20}}>
+        <h3 style={{marginBottom:10,fontSize:15}}>Look up booking</h3>
+        <div style={{display:"flex",gap:8}}>
+          <input className="fi" placeholder="Email or reference (RCEES-XXXXX)" value={q} onChange={e=>sQ(e.target.value)} style={{flex:1}} onKeyDown={e=>e.key==="Enter"&&lu()}/>
+          <button className="bt bt-s" onClick={lu}>Find</button>
+        </div>
+        {lr&&<div style={{marginTop:12}}>
+          {lr.t==="s"?
+            <div className="crd" style={{background:"var(--bg)",padding:14,fontSize:13}}>
+              <strong>{lr.d.ref}</strong> {"\u2014"} {lr.d.fac_name} {"\u00B7"} {lr.d.booking_date} {"\u00B7"} <span className={"tg "+(lr.d.status==="confirmed"?"t-ok":"t-w")}>{lr.d.status}</span> <span className={"tg "+(lr.d.pay_status==="paid"?"t-ok":"t-w")}>{lr.d.pay_status}</span>
+            </div>:
+            lr.d.length===0?<p style={{fontSize:13,color:"var(--ink3)",marginTop:8}}>No bookings found.</p>:
+            <div className="tw"><table><thead><tr><th>Ref</th><th>Facility</th><th>Date</th><th>Status</th><th>Payment</th></tr></thead><tbody>
+              {lr.d.map(b=><tr key={b.id}><td style={{fontFamily:"monospace",fontWeight:700}}>{b.ref}</td><td>{b.fac_name}</td><td>{b.booking_date}</td><td><span className={"tg "+(b.status==="confirmed"?"t-ok":"t-w")}>{b.status}</span></td><td><span className={"tg "+(b.pay_status==="paid"?"t-ok":"t-w")}>{b.pay_status}</span></td></tr>)}
+            </tbody></table></div>
+          }
+        </div>}
+      </div>
+
+      <h3 style={{marginBottom:12,fontSize:16}}>Select a Facility</h3>
+      <div className="g g3">
+        {facs.map(f=>{
+          const m=JSON.parse(f.media||"[]");
+          return(
+            <div key={f.id} className="fc" onClick={()=>{window.__fid=f.id;go("detail")}}>
+              <div className="fc-im" style={m.length?{backgroundImage:"url("+m[0].url+")"}:{}}>
+                {!m.length&&<span>{CI[f.cat_name]||"\u{1F3E2}"}</span>}
+                <span className="fc-ct">{f.cat_name}</span>
+              </div>
+              <div className="fc-bd">
+                <div className="fc-nm">{f.name}</div>
+                <div className="fc-mt"><span>{"\u{1F465}"} {f.capacity}</span><span>GH₵{f.hourly_rate}/hr</span></div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+/* ============ USER DASHBOARD ============ */
+const UDash=()=>{
+  const{user,go,toast}=useContext(X);
+  const[bks,sB]=useState([]);const[tab,sT]=useState("upcoming");const[ld,sL]=useState(true);
+  const load=()=>api("/api/bookings?user_id="+user.id+"&limit=200").then(d=>{sB(d.items);sL(false)});
+  useEffect(load,[]);
+  const td=new Date().toISOString().split("T")[0];
+  const up=bks.filter(b=>b.booking_date>=td&&!["cancelled","rejected"].includes(b.status));
+  const past=bks.filter(b=>b.booking_date<td||b.status==="completed");
+  const cx=bks.filter(b=>["cancelled","rejected"].includes(b.status));
+  const cancel=async bid=>{if(!confirm("Cancel?"))return;await api("/api/bookings/"+bid,{method:"PUT",body:{status:"cancelled"}});toast("Cancelled","inf");load()};
+  const disp=tab==="upcoming"?up:tab==="past"?past:cx;
+
+  return(
+    <div className="anim">
+      <h1 style={{fontSize:24,marginBottom:16,letterSpacing:-0.3}}>My Bookings</h1>
+      <div className="g g3" style={{marginBottom:16}}>
+        <div className="st"><div className="st-icon">{"\u{1F4C5}"}</div><div className="st-l">Upcoming</div><div className="st-v">{up.length}</div></div>
+        <div className="st sg"><div className="st-icon">{"\u2705"}</div><div className="st-l">Completed</div><div className="st-v">{past.length}</div></div>
+        <div className="st sw"><div className="st-icon">{"\u{1F4B0}"}</div><div className="st-l">Spent</div><div className="st-v" style={{fontSize:20}}>GH₵{bks.filter(b=>b.pay_status==="paid").reduce((s,b)=>s+(b.final_amount||0),0).toFixed(0)}</div></div>
+      </div>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+        <div className="tabs" style={{marginBottom:0}}>
+          {["upcoming","past","cancelled"].map(t=><div key={t} className={"tab"+(tab===t?" on":"")} onClick={()=>sT(t)}>{t.charAt(0).toUpperCase()+t.slice(1)}</div>)}
+        </div>
+        <button className="bt bt-p bt-sm" onClick={()=>go("browse")}>+ Book</button>
+      </div>
+      {ld?<div className="ld"><div className="spr"/></div>:
+        disp.length===0?
+          <div className="crd" style={{textAlign:"center",padding:44}}><p style={{fontSize:36,marginBottom:10}}>{"\u{1F4C5}"}</p><p style={{color:"var(--ink3)",fontSize:14}}>No {tab} bookings</p></div>:
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            {disp.map(b=>(
+              <div key={b.id} className="crd" style={{padding:14,display:"flex",alignItems:"center",gap:14}}>
+                <div style={{width:44,height:44,borderRadius:10,background:"var(--pri-bg)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{b.cat_icon||"\u{1F3E2}"}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontWeight:700,fontSize:14}}>{b.title}</div>
+                  <div style={{fontSize:12,color:"var(--ink3)",marginTop:2}}>{b.fac_name} {"\u00B7"} {b.booking_date} {"\u00B7"} {b.start_time} - {b.end_time}</div>
+                  <div style={{fontSize:11,color:"var(--ink4)",fontFamily:"monospace",marginTop:2}}>{b.ref}</div>
+                </div>
+                <div style={{textAlign:"right"}}>
+                  <span className={"tg "+(b.status==="confirmed"?"t-ok":b.status==="cancelled"?"t-err":"t-w")}>{b.status}</span>
+                  <div style={{fontSize:16,fontWeight:700,marginTop:4}}>GH₵{(b.final_amount||0).toFixed(2)}</div>
+                </div>
+                {!["cancelled","rejected","completed"].includes(b.status)&&<button className="bt bt-g bt-sm" style={{color:"var(--err)"}} onClick={()=>cancel(b.id)}>Cancel</button>}
+              </div>
+            ))}
+          </div>
+      }
+    </div>
+  );
+};
+
+/* ============ ADMIN DASHBOARD ============ */
+const ADash=()=>{
+  const[s,sS]=useState(null);const[ld,sL]=useState(true);
+  useEffect(()=>{api("/api/analytics/overview").then(d=>{sS(d);sL(false)})},[]);
+  if(ld)return <div className="ld"><div className="spr"/></div>;
+  return(
+    <div className="anim">
+      <h1 style={{fontSize:24,marginBottom:18,letterSpacing:-0.3}}>Dashboard</h1>
+      <div className="g g4" style={{marginBottom:18}}>
+        <div className="st"><div className="st-icon">{"\u{1F4C5}"}</div><div className="st-l">Today</div><div className="st-v">{s.today_bookings}</div></div>
+        <div className="st sg"><div className="st-icon">{"\u{1F4B0}"}</div><div className="st-l">Month Revenue</div><div className="st-v" style={{fontSize:20}}>GH₵{s.month_rev.toFixed(0)}</div></div>
+        <div className="st sr"><div className="st-icon">{"\u23F3"}</div><div className="st-l">Pending</div><div className="st-v">{s.pending}</div></div>
+        <div className="st sw"><div className="st-icon">{"\u{1F4CA}"}</div><div className="st-l">Occupancy</div><div className="st-v">{s.occupancy}%</div></div>
+      </div>
+      <div className="g g4" style={{marginBottom:18}}>
+        <div className="st"><div className="st-l">Facilities</div><div className="st-v">{s.total_facilities}</div></div>
+        <div className="st"><div className="st-l">Upcoming</div><div className="st-v">{s.upcoming}</div></div>
+        <div className="st sg"><div className="st-l">Total Revenue</div><div className="st-v" style={{fontSize:20}}>GH₵{s.total_rev.toFixed(0)}</div></div>
+        <div className="st"><div className="st-l">Users</div><div className="st-v">{s.total_users}</div></div>
+      </div>
+      <div className="g g2" style={{marginBottom:18}}>
+        <div className="crd">
+          <div className="crd-h"><h3>Popular Facilities</h3></div>
+          {s.popular.length===0?<p style={{color:"var(--ink4)",fontSize:13}}>No data</p>:
+            s.popular.map((f,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid var(--brd)",fontSize:13}}>
+                <div style={{display:"flex",alignItems:"center",gap:10}}>
+                  <span style={{color:"var(--ink4)",fontWeight:600,fontSize:12,width:20}}>{i+1}.</span>
+                  <span style={{fontWeight:500}}>{f.name}</span>
+                </div>
+                <div style={{display:"flex",alignItems:"center",gap:8}}>
+                  <div style={{height:6,width:Math.max(20,Math.min(120,(f.cnt/Math.max(...s.popular.map(x=>x.cnt),1))*120)),background:"var(--pri)",borderRadius:3}}/>
+                  <span className="tg t-ok" style={{fontSize:11}}>{f.cnt}</span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <div className="crd">
+          <div className="crd-h"><h3>Monthly Trends</h3></div>
+          <div style={{display:"flex",alignItems:"flex-end",gap:6,height:100,paddingTop:10}}>
+            {s.trends.map((t,i)=>{
+              const mx=Math.max(...s.trends.map(x=>x.bookings),1);
+              return(
+                <div key={i} style={{flex:1,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"flex-end",height:"100%"}}>
+                  <div style={{fontSize:10,fontWeight:600,color:"var(--ink3)",marginBottom:4}}>{t.bookings||""}</div>
+                  <div style={{height:Math.max(4,(t.bookings/mx)*70),background:"var(--pri)",borderRadius:"4px 4px 0 0",width:"100%",maxWidth:36,transition:"height 0.3s"}}/>
+                  <div style={{fontSize:10,color:"var(--ink4)",marginTop:4,fontWeight:500}}>{t.short}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="crd">
+        <div className="crd-h"><h3>Recent Bookings</h3></div>
+        <div className="tw">
+          <table><thead><tr><th>Ref</th><th>Facility</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            {s.recent.slice(0,8).map(b=>(
+              <tr key={b.id}>
+                <td><span className="inv-b">{b.ref}</span></td>
+                <td style={{fontWeight:500}}>{b.fac_name}</td>
+                <td>{b.booking_date}</td>
+                <td style={{fontWeight:600}}>GH₵{(b.final_amount||0).toFixed(2)}</td>
+                <td><span className={"tg "+(b.status==="confirmed"?"t-ok":b.status==="cancelled"?"t-err":"t-w")}>{b.status}</span></td>
+              </tr>
+            ))}
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ============ ADMIN BOOKINGS ============ */
+const ABk=()=>{
+  const{toast}=useContext(X);
+  const[bks,sB]=useState([]);const[tot,sT]=useState(0);const[fl,sFL]=useState("");const[q,sQ]=useState("");const[ld,sL]=useState(true);const[rjm,sRjm]=useState(null);const[rjr,sRjr]=useState("");
+  const load=()=>{let u="/api/bookings?limit=100";if(fl)u+="&status="+fl;if(q)u+="&search="+q;api(u).then(d=>{sB(d.items);sT(d.total);sL(false)})};
+  useEffect(load,[fl,q]);
+  const approve=async id=>{await api("/api/bookings/"+id+"/approve",{method:"POST",body:{approved_by:"admin"}});toast("Approved! Email sent.","ok");load()};
+  const reject=async()=>{if(!rjm)return;await api("/api/bookings/"+rjm+"/reject",{method:"POST",body:{reason:rjr}});toast("Rejected","inf");sRjm(null);sRjr("");load()};
+  const act=async(id,st)=>{await api("/api/bookings/"+id,{method:"PUT",body:{status:st}});toast(st,"ok");load()};
+  const exportCSV=()=>{window.open("/api/bookings/export","_blank")};
+
+  return(
+    <div className="anim">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <h1 style={{fontSize:22,letterSpacing:-0.3}}>Bookings ({tot})</h1>
+        <button className="bt bt-s bt-sm" onClick={exportCSV}>{"\u{1F4E5}"} Export CSV</button>
+      </div>
+      <div style={{display:"flex",gap:8,marginBottom:14}}>
+        <input className="fi" style={{width:220}} placeholder="Search..." value={q} onChange={e=>sQ(e.target.value)}/>
+        <select className="fi" style={{width:150}} value={fl} onChange={e=>sFL(e.target.value)}>
+          <option value="">All Status</option>
+          {["pending","confirmed","cancelled","completed","rejected"].map(s=><option key={s}>{s}</option>)}
+        </select>
+      </div>
+      {ld?<div className="ld"><div className="spr"/></div>:
+        <div className="crd"><div className="tw"><table>
+          <thead><tr><th>Ref</th><th>Facility</th><th>Title</th><th>By</th><th>Date</th><th>Time</th><th>Amount</th><th>Status</th><th>Pay</th><th>Actions</th></tr></thead>
+          <tbody>
+            {bks.map(b=>(
+              <tr key={b.id}>
+                <td><span className="inv-b">{b.ref}</span></td>
+                <td style={{fontWeight:600,fontSize:13}}>{b.fac_name}</td>
+                <td>{b.title}</td>
+                <td style={{fontSize:12}}>{b.guest_name||"User"}{b.is_walkin?<span className="tg t-p" style={{marginLeft:4}}>Walk-in</span>:null}</td>
+                <td>{b.booking_date}</td>
+                <td style={{fontSize:12}}>{b.start_time} - {b.end_time}</td>
+                <td style={{fontWeight:600}}>GH₵{(b.final_amount||0).toFixed(2)}</td>
+                <td><span className={"tg "+(b.status==="confirmed"?"t-ok":b.status==="cancelled"||b.status==="rejected"?"t-err":"t-w")}>{b.status}</span></td>
+                <td><span className={"tg "+(b.pay_status==="paid"?"t-ok":"t-w")}>{b.pay_status}</span></td>
+                <td>
+                  <div style={{display:"flex",gap:4}}>
+                    {b.status==="pending"&&<>
+                      <button className="bt bt-ok bt-sm" onClick={()=>approve(b.id)}>{"\u2713"} Approve</button>
+                      <button className="bt bt-d bt-sm" onClick={()=>sRjm(b.id)}>{"\u2717"}</button>
+                    </>}
+                    {b.status==="confirmed"&&<button className="bt bt-s bt-sm" onClick={()=>act(b.id,"completed")}>Done</button>}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div></div>
+      }
+      <Modal open={!!rjm} close={()=>sRjm(null)} title="Reject Booking" footer={<>
+        <button className="bt bt-s" onClick={()=>sRjm(null)}>Cancel</button>
+        <button className="bt bt-d" onClick={reject}>Reject & Notify</button>
+      </>}>
+        <div className="fg"><label className="fl">Reason (sent to applicant)</label><textarea className="fi" value={rjr} onChange={e=>sRjr(e.target.value)} placeholder="Why was this rejected?" rows={3}/></div>
+      </Modal>
+    </div>
+  );
+};
+
+/* ============ ADMIN INVOICES ============ */
+const AInv=()=>{
+  const[invs,sI]=useState([]);const[ld,sL]=useState(true);
+  useEffect(()=>{api("/api/invoices").then(d=>{sI(d);sL(false)})},[]);
+  return(
+    <div className="anim">
+      <h1 style={{fontSize:22,marginBottom:16,letterSpacing:-0.3}}>Invoices & Receipts ({invs.length})</h1>
+      {ld?<div className="ld"><div className="spr"/></div>:
+        invs.length===0?
+          <div className="crd" style={{textAlign:"center",padding:44}}><p style={{fontSize:36,marginBottom:10}}>{"\u{1F9FE}"}</p><p style={{color:"var(--ink3)",fontSize:14}}>No invoices yet. They are generated automatically when bookings are created or walk-ins registered.</p></div>:
+          <div className="crd"><div className="tw"><table>
+            <thead><tr><th>Invoice #</th><th>Type</th><th>Booking</th><th>Issued To</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody>
+              {invs.map(inv=>(
+                <tr key={inv.id}>
+                  <td><span className="inv-b">{inv.invoice_no}</span></td>
+                  <td><span className={"tg "+(inv.invoice_type==="receipt"?"t-ok":"t-p")}>{inv.invoice_type}</span></td>
+                  <td style={{fontFamily:"monospace",fontSize:11}}>{inv.booking_ref}</td>
+                  <td style={{fontSize:12}}>{inv.issued_to_name}<br/><span style={{color:"var(--ink4)",fontSize:11}}>{inv.issued_to_email}</span></td>
+                  <td style={{fontWeight:700}}>GH₵{inv.total.toFixed(2)}</td>
+                  <td><span className={"tg "+(inv.status==="paid"?"t-ok":inv.status==="issued"?"t-w":"t-n")}>{inv.status}</span></td>
+                  <td style={{fontSize:12}}>{(inv.issued_at||"").slice(0,10)}</td>
+                  <td><a href={"/api/invoices/"+inv.id+"/html"} target="_blank" className="bt bt-s bt-sm">Print</a></td>
+                </tr>
+              ))}
+            </tbody>
+          </table></div></div>
+      }
+    </div>
+  );
+};
+
+/* ============ ADMIN WALK-IN ============ */
+const AWalk=()=>{
+  const{toast}=useContext(X);
+  const[facs,sF]=useState([]);
+  const[fm,sFm]=useState({facility_id:"",guest_name:"",guest_email:"",guest_phone:"",guest_org:"",title:"Walk-in Booking",booking_date:new Date().toISOString().split("T")[0],start_time:"08:00",end_time:"09:00",attendees:1,pay_method:"cash"});
+  const[res,sRes]=useState(null);
+  useEffect(()=>{api("/api/facilities").then(sF)},[]);
+  const hrs=["07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"];
+  const submit=async()=>{try{const r=await api("/api/bookings/walkin",{method:"POST",body:fm});sRes(r);toast("Walk-in registered!","ok")}catch(e){toast(e.message,"err")}};
+
+  return(
+    <div className="anim">
+      <h1 style={{fontSize:22,marginBottom:6,letterSpacing:-0.3}}>Walk-in Registration</h1>
+      <p style={{color:"var(--ink3)",fontSize:13,marginBottom:18}}>Register on-site visitors. Auto-confirmed with receipt.</p>
+      {res?
+        <div className="crd" style={{maxWidth:500}}>
+          <div style={{textAlign:"center",marginBottom:16}}>
+            <div style={{fontSize:48,marginBottom:8}}>{"\u2705"}</div>
+            <h3 style={{fontSize:18}}>Registered!</h3>
+          </div>
+          <div style={{fontSize:13,marginBottom:14}}>
+            <div style={{marginBottom:4}}><strong>Ref:</strong> <span className="inv-b">{res.ref}</span></div>
+            <div style={{marginBottom:4}}><strong>Facility:</strong> {res.fac_name}</div>
+            <div style={{marginBottom:4}}><strong>Date:</strong> {res.booking_date} {"\u00B7"} {res.start_time} - {res.end_time}</div>
+            <div><strong>Amount:</strong> GH₵{res.final_amount?.toFixed(2)}</div>
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <button className="bt bt-p" onClick={()=>sRes(null)}>Register Another</button>
+            <button className="bt bt-s" onClick={()=>{api("/api/invoices?booking_id="+res.id).then(d=>{if(d.length>0)window.open("/api/invoices/"+d[0].id+"/html","_blank");else toast("No receipt yet","inf")})}}>Print Receipt</button>
+          </div>
+        </div>:
+        <div className="crd" style={{maxWidth:580}}>
+          <div className="fg"><label className="fl">Facility *</label>
+            <select className="fi" value={fm.facility_id} onChange={e=>sFm({...fm,facility_id:e.target.value})}>
+              <option value="">Select...</option>
+              {facs.map(f=><option key={f.id} value={f.id}>{f.name} (GH₵{f.hourly_rate}/hr)</option>)}
+            </select>
+          </div>
+          <div className="g g2">
+            <div className="fg"><label className="fl">Guest Name *</label><input className="fi" value={fm.guest_name} onChange={e=>sFm({...fm,guest_name:e.target.value})}/></div>
+            <div className="fg"><label className="fl">Phone</label><input className="fi" value={fm.guest_phone} onChange={e=>sFm({...fm,guest_phone:e.target.value})}/></div>
+          </div>
+          <div className="g g2">
+            <div className="fg"><label className="fl">Email</label><input className="fi" value={fm.guest_email} onChange={e=>sFm({...fm,guest_email:e.target.value})}/></div>
+            <div className="fg"><label className="fl">Organization</label><input className="fi" value={fm.guest_org} onChange={e=>sFm({...fm,guest_org:e.target.value})}/></div>
+          </div>
+          <div className="g g2">
+            <div className="fg"><label className="fl">Date</label><input className="fi" type="date" value={fm.booking_date} onChange={e=>sFm({...fm,booking_date:e.target.value})}/></div>
+            <div className="fg"><label className="fl">Attendees</label><input className="fi" type="number" min={1} value={fm.attendees} onChange={e=>sFm({...fm,attendees:parseInt(e.target.value)||1})}/></div>
+          </div>
+          <div className="g g2">
+            <div className="fg"><label className="fl">Start</label><select className="fi" value={fm.start_time} onChange={e=>sFm({...fm,start_time:e.target.value})}>{hrs.map(h=><option key={h}>{h}</option>)}</select></div>
+            <div className="fg"><label className="fl">End</label><select className="fi" value={fm.end_time} onChange={e=>sFm({...fm,end_time:e.target.value})}>{hrs.map(h=><option key={h}>{h}</option>)}</select></div>
+          </div>
+          <div className="fg"><label className="fl">Purpose</label><input className="fi" value={fm.title} onChange={e=>sFm({...fm,title:e.target.value})}/></div>
+          <div className="fg"><label className="fl">Payment</label>
+            <select className="fi" value={fm.pay_method} onChange={e=>sFm({...fm,pay_method:e.target.value})}>
+              <option value="cash">Cash</option><option value="momo">Mobile Money</option><option value="card">Card</option>
+            </select>
+          </div>
+          <button className="bt bt-p bt-lg" style={{width:"100%",justifyContent:"center"}} disabled={!fm.facility_id||!fm.guest_name} onClick={submit}>Register & Generate Receipt</button>
+        </div>
+      }
+    </div>
+  );
+};
+
+/* ============ ADMIN FACILITIES ============ */
+const AFc=()=>{
+  const{toast}=useContext(X);
+  const[facs,sF]=useState([]);const[cats,sC]=useState([]);const[show,sS]=useState(false);const[ld,sL]=useState(true);
+  const[fm,sFm]=useState({name:"",category_id:"",capacity:10,description:"",short_desc:"",hourly_rate:0,half_day_rate:0,full_day_rate:0,location:"",building:"",floor:"",amenities:[],requires_approval:0});
+  const[na,sNA]=useState("");
+  const load=()=>api("/api/facilities?active_only=false").then(f=>{sF(f);sL(false)});
+  useEffect(()=>{load();api("/api/categories").then(sC)},[]);
+  const add=async()=>{try{await api("/api/facilities",{method:"POST",body:fm});toast("Created!","ok");sS(false);load()}catch(e){toast(e.message,"err")}};
+  const tog=async(id,cur)=>{await api("/api/facilities/"+id,{method:"PUT",body:{is_active:cur?0:1}});load()};
+  const upm=async id=>{
+    const inp=document.createElement("input");inp.type="file";inp.accept="image/*,video/*";
+    inp.onchange=async e=>{const f=e.target.files[0];if(!f)return;const fd=new FormData();fd.append("file",f);try{await api("/api/facilities/"+id+"/media",{method:"POST",body:fd});toast("Uploaded!","ok");load()}catch(err){toast("Failed","err")}};
+    inp.click();
+  };
+
+  return(
+    <div className="anim">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <h1 style={{fontSize:22,letterSpacing:-0.3}}>Facilities</h1>
+        <button className="bt bt-p" onClick={()=>sS(true)}>+ Onboard</button>
+      </div>
+      {ld?<div className="ld"><div className="spr"/></div>:
+        <div className="crd"><div className="tw"><table>
+          <thead><tr><th>Name</th><th>Category</th><th>Capacity</th><th>Rate</th><th>Approval</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            {facs.map(f=>(
+              <tr key={f.id}>
+                <td style={{fontWeight:600}}>{f.name}</td>
+                <td>{f.cat_name}</td>
+                <td>{f.capacity}</td>
+                <td>GH₵{f.hourly_rate}</td>
+                <td>{f.requires_approval?<span className="tg t-w">Required</span>:<span className="tg t-n">Auto</span>}</td>
+                <td><span className={"tg "+(f.is_active?"t-ok":"t-err")}>{f.is_active?"Active":"Off"}</span></td>
+                <td>
+                  <div style={{display:"flex",gap:4}}>
+                    <button className="bt bt-s bt-sm" onClick={()=>upm(f.id)}>Upload</button>
+                    <button className="bt bt-s bt-sm" onClick={()=>tog(f.id,f.is_active)}>{f.is_active?"Disable":"Enable"}</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div></div>
+      }
+      <Modal open={show} close={()=>sS(false)} title="Onboard Facility" wide footer={<>
+        <button className="bt bt-s" onClick={()=>sS(false)}>Cancel</button>
+        <button className="bt bt-p" onClick={add}>Create</button>
+      </>}>
+        <div className="g g2">
+          <div className="fg"><label className="fl">Name *</label><input className="fi" value={fm.name} onChange={e=>sFm({...fm,name:e.target.value})}/></div>
+          <div className="fg"><label className="fl">Category</label>
+            <select className="fi" value={fm.category_id} onChange={e=>sFm({...fm,category_id:e.target.value})}>
+              <option value="">Select...</option>
+              {cats.map(c=><option key={c.id} value={c.id}>{c.icon} {c.name}</option>)}
+            </select>
+          </div>
+          <div className="fg"><label className="fl">Capacity</label><input className="fi" type="number" value={fm.capacity} onChange={e=>sFm({...fm,capacity:+e.target.value||0})}/></div>
+          <div className="fg"><label className="fl">Rate/hr</label><input className="fi" type="number" value={fm.hourly_rate} onChange={e=>sFm({...fm,hourly_rate:+e.target.value||0})}/></div>
+        </div>
+        <div className="fg"><label className="fl">Description</label><textarea className="fi" value={fm.description} onChange={e=>sFm({...fm,description:e.target.value})}/></div>
+        <div className="fg"><label className="fl">Amenities</label>
+          <div style={{display:"flex",gap:6,marginBottom:6}}>
+            <input className="fi" value={na} onChange={e=>sNA(e.target.value)} placeholder="Type + Enter" onKeyDown={e=>{if(e.key==="Enter"&&na){sFm({...fm,amenities:[...fm.amenities,na]});sNA("")}}}/>
+            <button className="bt bt-s bt-sm" onClick={()=>{if(na){sFm({...fm,amenities:[...fm.amenities,na]});sNA("")}}}>Add</button>
+          </div>
+          <div className="am-l">{fm.amenities.map((a,i)=><span key={i} className="am" style={{cursor:"pointer"}} onClick={()=>sFm({...fm,amenities:fm.amenities.filter((_,j)=>j!==i)})}>{a} {"\u2715"}</span>)}</div>
+        </div>
+        <label style={{fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
+          <input type="checkbox" checked={fm.requires_approval} onChange={e=>sFm({...fm,requires_approval:e.target.checked?1:0})}/> Require approval
+        </label>
+      </Modal>
+    </div>
+  );
+};
+
+/* ============ ADMIN MAINTENANCE ============ */
+const AMt=()=>{
+  const{toast}=useContext(X);
+  const[items,sI]=useState([]);const[facs,sF]=useState([]);const[show,sS]=useState(false);const[ld,sL]=useState(true);
+  const[fm,sFm]=useState({facility_id:"",title:"",mtype:"routine",priority:"medium",start_date:"",end_date:"",cost_est:0,blocks_bookings:1});
+  useEffect(()=>{api("/api/maintenance").then(m=>{sI(m);sL(false)});api("/api/facilities?active_only=false").then(sF)},[]);
+  const add=async()=>{try{await api("/api/maintenance",{method:"POST",body:fm});toast("Scheduled!","ok");sS(false);api("/api/maintenance").then(sI)}catch(e){toast(e.message,"err")}};
+  const upd=async(id,st)=>{await api("/api/maintenance/"+id,{method:"PUT",body:{status:st}});api("/api/maintenance").then(sI)};
+
+  return(
+    <div className="anim">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <h1 style={{fontSize:22,letterSpacing:-0.3}}>Maintenance</h1>
+        <button className="bt bt-p" onClick={()=>sS(true)}>+ Schedule</button>
+      </div>
+      {ld?<div className="ld"><div className="spr"/></div>:
+        <div className="crd"><div className="tw"><table>
+          <thead><tr><th>Facility</th><th>Title</th><th>Type</th><th>Priority</th><th>Dates</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            {items.map(m=>(
+              <tr key={m.id}>
+                <td style={{fontWeight:600}}>{m.fac_name}</td>
+                <td>{m.title}</td>
+                <td><span className="tg t-n">{m.mtype}</span></td>
+                <td><span className={"tg "+(m.priority==="high"||m.priority==="critical"?"t-err":"t-w")}>{m.priority}</span></td>
+                <td style={{fontSize:12}}>{(m.start_date||"").slice(0,10)} {"\u2192"} {(m.end_date||"").slice(0,10)}</td>
+                <td><span className={"tg "+(m.status==="completed"?"t-ok":m.status==="in_progress"?"t-w":"t-p")}>{m.status}</span></td>
+                <td>
+                  {m.status==="scheduled"&&<button className="bt bt-s bt-sm" onClick={()=>upd(m.id,"in_progress")}>Start</button>}
+                  {m.status==="in_progress"&&<button className="bt bt-p bt-sm" onClick={()=>upd(m.id,"completed")}>Done</button>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table></div></div>
+      }
+      <Modal open={show} close={()=>sS(false)} title="Schedule Maintenance" footer={<>
+        <button className="bt bt-s" onClick={()=>sS(false)}>Cancel</button>
+        <button className="bt bt-p" onClick={add}>Schedule</button>
+      </>}>
+        <div className="fg"><label className="fl">Facility</label>
+          <select className="fi" value={fm.facility_id} onChange={e=>sFm({...fm,facility_id:e.target.value})}>
+            <option value="">Select...</option>
+            {facs.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}
+          </select>
+        </div>
+        <div className="fg"><label className="fl">Title</label><input className="fi" value={fm.title} onChange={e=>sFm({...fm,title:e.target.value})}/></div>
+        <div className="g g2">
+          <div className="fg"><label className="fl">Start</label><input className="fi" type="date" value={fm.start_date} onChange={e=>sFm({...fm,start_date:e.target.value})}/></div>
+          <div className="fg"><label className="fl">End</label><input className="fi" type="date" value={fm.end_date} onChange={e=>sFm({...fm,end_date:e.target.value})}/></div>
+        </div>
+      </Modal>
+    </div>
+  );
+};
+
+/* ============ ADMIN DISCOUNTS ============ */
+const ADc=()=>{
+  const{toast}=useContext(X);
+  const[items,sI]=useState([]);const[show,sS]=useState(false);
+  const[fm,sFm]=useState({code:"",name:"",dtype:"percentage",value:0,min_hours:0,max_uses:0});
+  useEffect(()=>{api("/api/discounts").then(sI)},[]);
+  const add=async()=>{try{await api("/api/discounts",{method:"POST",body:fm});toast("Created!","ok");sS(false);api("/api/discounts").then(sI)}catch(e){toast(e.message,"err")}};
+  const tog=async(id,a)=>{await api("/api/discounts/"+id,{method:"PUT",body:{is_active:a?0:1}});api("/api/discounts").then(sI)};
+
+  return(
+    <div className="anim">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <h1 style={{fontSize:22,letterSpacing:-0.3}}>Discounts</h1>
+        <button className="bt bt-p" onClick={()=>sS(true)}>+ Create</button>
+      </div>
+      <div className="crd"><div className="tw"><table>
+        <thead><tr><th>Code</th><th>Name</th><th>Value</th><th>Min Hrs</th><th>Uses</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          {items.map(d=>(
+            <tr key={d.id}>
+              <td><span className="inv-b">{d.code}</span></td>
+              <td>{d.name}</td>
+              <td>{d.dtype==="percentage"?d.value+"%":"GH₵"+d.value}</td>
+              <td>{d.min_hours||"\u2014"}</td>
+              <td>{d.times_used}{d.max_uses>0?"/"+d.max_uses:"/\u221E"}</td>
+              <td><span className={"tg "+(d.is_active?"t-ok":"t-err")}>{d.is_active?"On":"Off"}</span></td>
+              <td><button className="bt bt-s bt-sm" onClick={()=>tog(d.id,d.is_active)}>{d.is_active?"Disable":"Enable"}</button></td>
+            </tr>
+          ))}
+        </tbody>
+      </table></div></div>
+      <Modal open={show} close={()=>sS(false)} title="Create Discount" footer={<>
+        <button className="bt bt-s" onClick={()=>sS(false)}>Cancel</button>
+        <button className="bt bt-p" onClick={add}>Create</button>
+      </>}>
+        <div className="g g2">
+          <div className="fg"><label className="fl">Code</label><input className="fi" value={fm.code} onChange={e=>sFm({...fm,code:e.target.value.toUpperCase()})}/></div>
+          <div className="fg"><label className="fl">Name</label><input className="fi" value={fm.name} onChange={e=>sFm({...fm,name:e.target.value})}/></div>
+          <div className="fg"><label className="fl">Type</label>
+            <select className="fi" value={fm.dtype} onChange={e=>sFm({...fm,dtype:e.target.value})}>
+              <option value="percentage">%</option><option value="fixed">GH₵</option>
+            </select>
+          </div>
+          <div className="fg"><label className="fl">Value</label><input className="fi" type="number" value={fm.value} onChange={e=>sFm({...fm,value:+e.target.value||0})}/></div>
+        </div>
+      </Modal>
+    </div>
+  );
+};
+
+/* ============ ADMIN USERS ============ */
+const AUs=()=>{
+  const{toast}=useContext(X);
+  const[users,sU]=useState([]);const[q,sQ]=useState("");
+  const load=()=>api("/api/users"+(q?"?search="+q:"")).then(sU);
+  useEffect(load,[q]);
+  return(
+    <div className="anim">
+      <h1 style={{fontSize:22,marginBottom:16,letterSpacing:-0.3}}>Users</h1>
+      <input className="fi" style={{maxWidth:280,marginBottom:14}} placeholder="Search users..." value={q} onChange={e=>sQ(e.target.value)}/>
+      <div className="crd"><div className="tw"><table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Organization</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          {users.map(u=>(
+            <tr key={u.id}>
+              <td style={{fontWeight:600}}>{u.name}</td>
+              <td style={{fontSize:12}}>{u.email}</td>
+              <td><span className={"tg "+(u.role==="admin"?"t-ok":"t-n")}>{u.role}</span></td>
+              <td style={{fontSize:12}}>{u.organization||"\u2014"}</td>
+              <td><span className={"tg "+(u.is_active?"t-ok":"t-err")}>{u.is_active?"Active":"Off"}</span></td>
+              <td>
+                <select className="fi" style={{width:90,padding:"4px 8px",fontSize:11}} value={u.role} onChange={async e=>{await api("/api/users/"+u.id,{method:"PUT",body:{role:e.target.value}});toast("Updated","ok");load()}}>
+                  {["user","staff","manager","admin"].map(r=><option key={r}>{r}</option>)}
+                </select>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table></div></div>
+    </div>
+  );
+};
+
+/* ============ PAYMENT PAGE ============ */
+const PayPage=()=>{
+  const{toast}=useContext(X);
+  const[bk,sBk]=useState(null);const[ld,sL]=useState(true);const[pm,sPm]=useState("");const[done,sDone]=useState(false);
+  const tk=window.__payToken||"";
+  useEffect(()=>{if(tk)api("/api/bookings/pay/"+tk).then(b=>{sBk(b);sL(false)}).catch(()=>sL(false))},[]);
+  const pay=async()=>{try{await api("/api/payments/process",{method:"POST",body:{booking_id:bk.id,method:pm}});sDone(true);toast("Payment successful!","ok")}catch(e){toast(e.message,"err")}};
+
+  if(ld)return <div className="ld"><div className="spr"/></div>;
+  if(!bk)return(
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div className="crd" style={{maxWidth:400,textAlign:"center",padding:32}}>
+        <div style={{fontSize:48}}>{"\u274C"}</div>
+        <h2 style={{fontSize:20,marginTop:8}}>Invalid Payment Link</h2>
+        <p style={{color:"var(--ink3)",fontSize:13,marginTop:4}}>This link may have expired.</p>
+      </div>
+    </div>
+  );
+  if(done)return(
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div className="crd" style={{maxWidth:420,textAlign:"center",padding:32}}>
+        <div style={{fontSize:48}}>{"\u2705"}</div>
+        <h2 style={{fontSize:20,marginTop:8}}>Payment Complete!</h2>
+        <p style={{color:"var(--ink3)",fontSize:13,marginBottom:14}}>Booking <strong>{bk.ref}</strong> is confirmed and paid.</p>
+        <a href="/" className="bt bt-p">Back to RCEES</a>
+      </div>
+    </div>
+  );
+  return(
+    <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--bg)"}}>
+      <div className="crd" style={{maxWidth:460,padding:28}}>
+        <div style={{textAlign:"center",marginBottom:18}}>
+          <div className="s-ic" style={{margin:"0 auto 10px",width:44,height:44,fontSize:17}}>R</div>
+          <h2 style={{fontSize:20}}>Complete Payment</h2>
+          <p style={{color:"var(--ink3)",fontSize:12}}>Booking {bk.ref}</p>
+        </div>
+        <div style={{background:"var(--bg)",padding:14,borderRadius:"var(--r2)",marginBottom:16,fontSize:13,border:"1px solid var(--brd)"}}>
+          <div><strong>Facility:</strong> {bk.fac_name}</div>
+          <div><strong>Date:</strong> {bk.booking_date} {"\u00B7"} {bk.start_time} - {bk.end_time}</div>
+          <div><strong>Amount:</strong> <span style={{fontSize:20,fontWeight:700,color:"var(--pri)"}}>GH₵{bk.final_amount?.toFixed(2)}</span></div>
+        </div>
+        <div className="fl">Payment Method</div>
+        <div className="pm-g">
+          {[{id:"momo",l:"Mobile Money",i:"\u{1F4F1}"},{id:"card",l:"Bank Card",i:"\u{1F4B3}"},{id:"cash",l:"Office",i:"\u{1F4B5}"}].map(p=>(
+            <div key={p.id} className={"pm"+(pm===p.id?" psel":"")} onClick={()=>sPm(p.id)}>
+              <div className="pm-ic">{p.i}</div>{p.l}
+            </div>
+          ))}
+        </div>
+        <button className="bt bt-p bt-lg" style={{width:"100%",justifyContent:"center",marginTop:8}} disabled={!pm} onClick={pay}>Pay GH₵{bk.final_amount?.toFixed(2)}</button>
+      </div>
+    </div>
+  );
+};
+
+/* ============ NEW: ADMIN AVAILABILITY ============ */
+const AAvail=()=>{
+  const{toast}=useContext(X);
+  const[facs,sF]=useState([]);
+  const[selFac,setSelFac]=useState("");
+  const[rules,setRules]=useState([]);
+  const[selDate,setSelDate]=useState("");
+  const[ld,sL]=useState(false);
+  const[showAdd,setShowAdd]=useState(false);
+  const[showBulk,setShowBulk]=useState(false);
+  const[fm,setFm]=useState({date:"",start_time:"",end_time:"",all_day:true,reason:""});
+  const[bulkFm,setBulkFm]=useState({start_date:"",end_date:"",start_time:"",end_time:"",all_day:true,reason:""});
+
+  useEffect(()=>{api("/api/facilities").then(sF)},[]);
+
+  const loadRules=useCallback(()=>{
+    if(!selFac)return;
+    sL(true);
+    api("/api/availability/rules?facility_id="+selFac).then(d=>{setRules(d);sL(false)}).catch(()=>sL(false));
+  },[selFac]);
+  useEffect(loadRules,[selFac]);
+
+  const blockedDates=useMemo(()=>rules.filter(r=>r.all_day).map(r=>r.date),[rules]);
+  const rulesForDate=useMemo(()=>rules.filter(r=>r.date===selDate),[rules,selDate]);
+
+  const addRule=async()=>{
+    try{
+      await api("/api/availability/rules",{method:"POST",body:{facility_id:selFac,...fm}});
+      toast("Block added","ok");setShowAdd(false);setFm({date:"",start_time:"",end_time:"",all_day:true,reason:""});loadRules();
+    }catch(e){toast(e.message,"err")}
+  };
+  const bulkBlock=async()=>{
+    try{
+      await api("/api/availability/bulk",{method:"POST",body:{facility_id:selFac,...bulkFm}});
+      toast("Bulk block applied","ok");setShowBulk(false);setBulkFm({start_date:"",end_date:"",start_time:"",end_time:"",all_day:true,reason:""});loadRules();
+    }catch(e){toast(e.message,"err")}
+  };
+  const delRule=async(id)=>{
+    try{await api("/api/availability/rules/"+id,{method:"DELETE"});toast("Unblocked","ok");loadRules()}catch(e){toast(e.message,"err")}
+  };
+  const onDateClick=(ds)=>{
+    setSelDate(ds);
+    if(selFac){
+      const existing=rules.find(r=>r.date===ds&&r.all_day);
+      if(!existing){
+        setFm({...fm,date:ds});
+        setShowAdd(true);
+      }
+    }
+  };
+
+  return(
+    <div className="anim">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <h1 style={{fontSize:22,letterSpacing:-0.3}}>Availability Management</h1>
+        <div style={{display:"flex",gap:8}}>
+          <button className="bt bt-s" onClick={()=>setShowBulk(true)} disabled={!selFac}>Bulk Block</button>
+          <button className="bt bt-p" onClick={()=>{setFm({date:selDate||"",start_time:"",end_time:"",all_day:true,reason:""});setShowAdd(true)}} disabled={!selFac}>+ Block Date</button>
+        </div>
+      </div>
+
+      <div className="fg" style={{maxWidth:320}}>
+        <label className="fl">Select Facility</label>
+        <select className="fi" value={selFac} onChange={e=>{setSelFac(e.target.value);setSelDate("")}}>
+          <option value="">Choose a facility...</option>
+          {facs.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}
+        </select>
+      </div>
+
+      {selFac&&(
+        <div className="g g2" style={{alignItems:"start"}}>
+          <div className="crd">
+            <h3 style={{fontSize:15,marginBottom:12}}>Calendar</h3>
+            <Cal sel={selDate} onSel={onDateClick} blockedDates={blockedDates} allowPast={true}/>
+            <div style={{marginTop:12,display:"flex",gap:12,fontSize:11,color:"var(--ink3)"}}>
+              <span><span style={{display:"inline-block",width:10,height:10,borderRadius:3,background:"var(--err-bg)",marginRight:4,border:"1px solid var(--err)"}}/>Blocked</span>
+              <span><span style={{display:"inline-block",width:10,height:10,borderRadius:3,background:"var(--pri)",marginRight:4}}/>Today</span>
+            </div>
+          </div>
+          <div className="crd">
+            <h3 style={{fontSize:15,marginBottom:12}}>
+              {selDate?("Rules for "+new Date(selDate+"T12:00").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric"})):"Active Blocks"}
+            </h3>
+            {ld?<div className="ld" style={{minHeight:100}}><div className="spr"/></div>:
+              (selDate?rulesForDate:rules).length===0?
+                <p style={{color:"var(--ink3)",fontSize:13,textAlign:"center",padding:20}}>No blocks {selDate?"on this date":"configured"}</p>:
+                <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                  {(selDate?rulesForDate:rules).map(r=>(
+                    <div key={r.id} style={{padding:12,background:"var(--bg)",borderRadius:"var(--r1)",border:"1px solid var(--brd)",display:"flex",alignItems:"center",gap:10}}>
+                      <div style={{flex:1}}>
+                        <div style={{fontWeight:600,fontSize:13}}>{r.date}</div>
+                        <div style={{fontSize:12,color:"var(--ink3)"}}>
+                          {r.all_day?"All Day":(r.start_time+" - "+r.end_time)}
+                          {r.reason&&(" \u2014 "+r.reason)}
+                        </div>
+                      </div>
+                      <button className="bt bt-d bt-sm" onClick={()=>delRule(r.id)}>Unblock</button>
+                    </div>
+                  ))}
+                </div>
+            }
+          </div>
+        </div>
+      )}
+
+      <Modal open={showAdd} close={()=>setShowAdd(false)} title="Block Date/Time" footer={<>
+        <button className="bt bt-s" onClick={()=>setShowAdd(false)}>Cancel</button>
+        <button className="bt bt-p" onClick={addRule} disabled={!fm.date}>Block</button>
+      </>}>
+        <div className="fg"><label className="fl">Date</label><input className="fi" type="date" value={fm.date} onChange={e=>setFm({...fm,date:e.target.value})}/></div>
+        <div className="fg">
+          <label style={{fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
+            <input type="checkbox" checked={fm.all_day} onChange={e=>setFm({...fm,all_day:e.target.checked})}/>Block entire day
+          </label>
+        </div>
+        {!fm.all_day&&(
+          <div className="g g2">
+            <div className="fg"><label className="fl">Start Time</label><input className="fi" type="time" value={fm.start_time} onChange={e=>setFm({...fm,start_time:e.target.value})}/></div>
+            <div className="fg"><label className="fl">End Time</label><input className="fi" type="time" value={fm.end_time} onChange={e=>setFm({...fm,end_time:e.target.value})}/></div>
+          </div>
+        )}
+        <div className="fg"><label className="fl">Reason (optional)</label><input className="fi" value={fm.reason} onChange={e=>setFm({...fm,reason:e.target.value})} placeholder="e.g. Public holiday"/></div>
+      </Modal>
+
+      <Modal open={showBulk} close={()=>setShowBulk(false)} title="Bulk Block Date Range" footer={<>
+        <button className="bt bt-s" onClick={()=>setShowBulk(false)}>Cancel</button>
+        <button className="bt bt-p" onClick={bulkBlock} disabled={!bulkFm.start_date||!bulkFm.end_date}>Apply Block</button>
+      </>}>
+        <div className="g g2">
+          <div className="fg"><label className="fl">Start Date</label><input className="fi" type="date" value={bulkFm.start_date} onChange={e=>setBulkFm({...bulkFm,start_date:e.target.value})}/></div>
+          <div className="fg"><label className="fl">End Date</label><input className="fi" type="date" value={bulkFm.end_date} onChange={e=>setBulkFm({...bulkFm,end_date:e.target.value})}/></div>
+        </div>
+        <div className="fg">
+          <label style={{fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
+            <input type="checkbox" checked={bulkFm.all_day} onChange={e=>setBulkFm({...bulkFm,all_day:e.target.checked})}/>Block entire days
+          </label>
+        </div>
+        {!bulkFm.all_day&&(
+          <div className="g g2">
+            <div className="fg"><label className="fl">Start Time</label><input className="fi" type="time" value={bulkFm.start_time} onChange={e=>setBulkFm({...bulkFm,start_time:e.target.value})}/></div>
+            <div className="fg"><label className="fl">End Time</label><input className="fi" type="time" value={bulkFm.end_time} onChange={e=>setBulkFm({...bulkFm,end_time:e.target.value})}/></div>
+          </div>
+        )}
+        <div className="fg"><label className="fl">Reason (optional)</label><input className="fi" value={bulkFm.reason} onChange={e=>setBulkFm({...bulkFm,reason:e.target.value})} placeholder="e.g. Renovation period"/></div>
+      </Modal>
+    </div>
+  );
+};
+
+/* ============ NEW: MANUAL INVOICE / CREATE INVOICE ============ */
+const AManualInv=()=>{
+  const{toast}=useContext(X);
+  const[facs,sF]=useState([]);
+  const[fm,setFm]=useState({
+    guest_name:"",guest_email:"",guest_phone:"",guest_org:"",
+    facility_id:"",booking_date:new Date().toISOString().split("T")[0],
+    start_time:"08:00",end_time:"09:00",
+    invoice_type:"invoice",
+    line_items:[{description:"",quantity:1,unit_price:0}]
+  });
+  const[preview,setPreview]=useState(false);
+  const[result,setResult]=useState(null);
+
+  useEffect(()=>{api("/api/facilities").then(sF)},[]);
+
+  const addLine=()=>setFm({...fm,line_items:[...fm.line_items,{description:"",quantity:1,unit_price:0}]});
+  const removeLine=(idx)=>setFm({...fm,line_items:fm.line_items.filter((_,i)=>i!==idx)});
+  const updateLine=(idx,field,val)=>{
+    const items=[...fm.line_items];
+    items[idx]={...items[idx],[field]:val};
+    setFm({...fm,line_items:items});
+  };
+
+  const total=fm.line_items.reduce((s,li)=>s+(li.quantity*li.unit_price),0);
+  const hrs=["07:00","08:00","09:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00"];
+
+  const generate=async()=>{
+    try{
+      const r=await api("/api/invoices/manual",{method:"POST",body:fm});
+      setResult(r);toast("Invoice generated!","ok");
+    }catch(e){toast(e.message,"err")}
+  };
+
+  if(result){
+    return(
+      <div className="anim">
+        <h1 style={{fontSize:22,marginBottom:16,letterSpacing:-0.3}}>Invoice Created</h1>
+        <div className="crd" style={{maxWidth:500}}>
+          <div style={{textAlign:"center",marginBottom:16}}>
+            <div style={{fontSize:48,marginBottom:8}}>{"\u2705"}</div>
+            <h3 style={{fontSize:18}}>Generated Successfully</h3>
+          </div>
+          <div style={{fontSize:13,marginBottom:16}}>
+            {result.invoice_no&&<div style={{marginBottom:4}}><strong>Invoice #:</strong> <span className="inv-b">{result.invoice_no}</span></div>}
+            {result.ref&&<div style={{marginBottom:4}}><strong>Booking Ref:</strong> <span className="inv-b">{result.ref}</span></div>}
+            <div style={{marginBottom:4}}><strong>Type:</strong> <span className={"tg "+(fm.invoice_type==="receipt"?"t-ok":"t-p")}>{fm.invoice_type}</span></div>
+            <div><strong>Total:</strong> <span style={{fontSize:18,fontWeight:700,color:"var(--pri)"}}>GH₵{total.toFixed(2)}</span></div>
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <button className="bt bt-p" onClick={()=>{setResult(null);setFm({...fm,line_items:[{description:"",quantity:1,unit_price:0}],guest_name:"",guest_email:"",guest_phone:"",guest_org:""})}}>Create Another</button>
+            {result.id&&<a href={"/api/invoices/"+result.id+"/html"} target="_blank" className="bt bt-s">View / Print</a>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return(
+    <div className="anim">
+      <h1 style={{fontSize:22,marginBottom:6,letterSpacing:-0.3}}>Create Invoice</h1>
+      <p style={{color:"var(--ink3)",fontSize:13,marginBottom:18}}>Manually create an invoice or receipt with custom line items.</p>
+
+      {preview?
+        <div className="crd" style={{maxWidth:600}}>
+          <h3 style={{fontSize:16,marginBottom:14}}>Preview</h3>
+          <div style={{background:"var(--bg)",padding:16,borderRadius:"var(--r1)",marginBottom:14,fontSize:13,border:"1px solid var(--brd)"}}>
+            <div style={{fontWeight:700,fontSize:15,marginBottom:8,textTransform:"uppercase"}}>{fm.invoice_type}</div>
+            <div style={{marginBottom:4}}><strong>To:</strong> {fm.guest_name} {fm.guest_email&&("("+fm.guest_email+")")}</div>
+            {fm.guest_org&&<div style={{marginBottom:4}}><strong>Org:</strong> {fm.guest_org}</div>}
+            <div style={{marginBottom:4}}><strong>Facility:</strong> {facs.find(f=>f.id==fm.facility_id)?.name||"N/A"}</div>
+            <div style={{marginBottom:8}}><strong>Date:</strong> {fm.booking_date} {"\u00B7"} {fm.start_time} - {fm.end_time}</div>
+            <table style={{width:"100%",fontSize:12}}>
+              <thead><tr><th style={{textAlign:"left",paddingBottom:6}}>Description</th><th style={{textAlign:"right",paddingBottom:6}}>Qty</th><th style={{textAlign:"right",paddingBottom:6}}>Price</th><th style={{textAlign:"right",paddingBottom:6}}>Total</th></tr></thead>
+              <tbody>
+                {fm.line_items.map((li,i)=>(
+                  <tr key={i}><td>{li.description}</td><td style={{textAlign:"right"}}>{li.quantity}</td><td style={{textAlign:"right"}}>GH₵{Number(li.unit_price).toFixed(2)}</td><td style={{textAlign:"right"}}>GH₵{(li.quantity*li.unit_price).toFixed(2)}</td></tr>
+                ))}
+              </tbody>
+            </table>
+            <div style={{borderTop:"2px solid var(--brd)",marginTop:8,paddingTop:8,textAlign:"right",fontSize:18,fontWeight:700,color:"var(--pri)"}}>Total: GH₵{total.toFixed(2)}</div>
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <button className="bt bt-s" onClick={()=>setPreview(false)}>Edit</button>
+            <button className="bt bt-p" onClick={generate}>Generate {fm.invoice_type==="receipt"?"Receipt":"Invoice"}</button>
+          </div>
+        </div>:
+        <div className="crd" style={{maxWidth:700}}>
+          <div style={{display:"flex",gap:8,marginBottom:16}}>
+            <button className={"bt bt-sm "+(fm.invoice_type==="invoice"?"bt-p":"bt-s")} onClick={()=>setFm({...fm,invoice_type:"invoice"})}>Invoice</button>
+            <button className={"bt bt-sm "+(fm.invoice_type==="receipt"?"bt-p":"bt-s")} onClick={()=>setFm({...fm,invoice_type:"receipt"})}>Receipt</button>
+          </div>
+
+          <h4 style={{fontSize:13,fontWeight:600,color:"var(--ink3)",marginBottom:10,textTransform:"uppercase",letterSpacing:0.5}}>Guest Information</h4>
+          <div className="g g2">
+            <div className="fg"><label className="fl">Name *</label><input className="fi" value={fm.guest_name} onChange={e=>setFm({...fm,guest_name:e.target.value})}/></div>
+            <div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={fm.guest_email} onChange={e=>setFm({...fm,guest_email:e.target.value})}/></div>
+          </div>
+          <div className="g g2">
+            <div className="fg"><label className="fl">Phone</label><input className="fi" value={fm.guest_phone} onChange={e=>setFm({...fm,guest_phone:e.target.value})}/></div>
+            <div className="fg"><label className="fl">Organization</label><input className="fi" value={fm.guest_org} onChange={e=>setFm({...fm,guest_org:e.target.value})}/></div>
+          </div>
+
+          <h4 style={{fontSize:13,fontWeight:600,color:"var(--ink3)",marginBottom:10,marginTop:8,textTransform:"uppercase",letterSpacing:0.5}}>Booking Details</h4>
+          <div className="fg"><label className="fl">Facility</label>
+            <select className="fi" value={fm.facility_id} onChange={e=>setFm({...fm,facility_id:e.target.value})}>
+              <option value="">Select...</option>
+              {facs.map(f=><option key={f.id} value={f.id}>{f.name}</option>)}
+            </select>
+          </div>
+          <div className="g g3">
+            <div className="fg"><label className="fl">Date</label><input className="fi" type="date" value={fm.booking_date} onChange={e=>setFm({...fm,booking_date:e.target.value})}/></div>
+            <div className="fg"><label className="fl">Start</label><select className="fi" value={fm.start_time} onChange={e=>setFm({...fm,start_time:e.target.value})}>{hrs.map(h=><option key={h}>{h}</option>)}</select></div>
+            <div className="fg"><label className="fl">End</label><select className="fi" value={fm.end_time} onChange={e=>setFm({...fm,end_time:e.target.value})}>{hrs.map(h=><option key={h}>{h}</option>)}</select></div>
+          </div>
+
+          <h4 style={{fontSize:13,fontWeight:600,color:"var(--ink3)",marginBottom:10,marginTop:8,textTransform:"uppercase",letterSpacing:0.5}}>Line Items</h4>
+          {fm.line_items.map((li,i)=>(
+            <div key={i} className="line-item-row">
+              <input className="fi" placeholder="Description" value={li.description} onChange={e=>updateLine(i,"description",e.target.value)}/>
+              <input className="fi fi-sm" type="number" min={1} placeholder="Qty" value={li.quantity} onChange={e=>updateLine(i,"quantity",parseInt(e.target.value)||1)}/>
+              <input className="fi fi-sm" type="number" min={0} step="0.01" placeholder="Price" value={li.unit_price} onChange={e=>updateLine(i,"unit_price",parseFloat(e.target.value)||0)}/>
+              <div style={{fontWeight:600,fontSize:13,width:90,textAlign:"right",flexShrink:0}}>GH₵{(li.quantity*li.unit_price).toFixed(2)}</div>
+              {fm.line_items.length>1&&<button className="remove-line" onClick={()=>removeLine(i)}>{"\u2715"}</button>}
+            </div>
+          ))}
+          <button className="bt bt-g bt-sm" onClick={addLine} style={{marginBottom:14}}>+ Add Line Item</button>
+
+          <div style={{borderTop:"2px solid var(--brd)",paddingTop:12,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{fontSize:20,fontWeight:700,color:"var(--pri)"}}>Total: GH₵{total.toFixed(2)}</div>
+            <button className="bt bt-p" onClick={()=>setPreview(true)} disabled={!fm.guest_name||fm.line_items.length===0}>Preview</button>
+          </div>
+        </div>
+      }
+    </div>
+  );
+};
+
+/* ============ NEW: ACTIVITY LOG ============ */
+const AActivity=()=>{
+  const[items,setItems]=useState([]);const[ld,sL]=useState(true);
+  useEffect(()=>{api("/api/activity").then(d=>{setItems(Array.isArray(d)?d:(d.items||[]));sL(false)}).catch(()=>sL(false))},[]);
+
+  const actionColor=(action)=>{
+    if(!action)return "t-n";
+    const a=action.toLowerCase();
+    if(a.includes("creat")||a.includes("approv")||a.includes("confirm"))return "t-ok";
+    if(a.includes("reject")||a.includes("cancel")||a.includes("delet"))return "t-err";
+    if(a.includes("updat")||a.includes("modif"))return "t-w";
+    return "t-p";
+  };
+
+  return(
+    <div className="anim">
+      <h1 style={{fontSize:22,marginBottom:18,letterSpacing:-0.3}}>Activity Log</h1>
+      {ld?<div className="ld"><div className="spr"/></div>:
+        items.length===0?
+          <div className="crd" style={{textAlign:"center",padding:44}}><p style={{fontSize:36,marginBottom:10}}>{"\u{1F4CB}"}</p><p style={{color:"var(--ink3)",fontSize:14}}>No recent activity</p></div>:
+          <div className="crd">
+            {items.map((it,i)=>(
+              <div key={i} className="tl-item">
+                <div className="tl-dot"/>
+                <div className="tl-content">
+                  <div className="tl-action">
+                    <span className={"tg "+actionColor(it.action)} style={{marginRight:8}}>{it.action}</span>
+                    {it.entity&&<span style={{color:"var(--ink2)"}}>{it.entity}</span>}
+                  </div>
+                  <div className="tl-meta">
+                    {it.user&&<span>{"\u{1F464}"} {it.user}</span>}
+                    {it.timestamp&&<span>{new Date(it.timestamp).toLocaleString("en",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}</span>}
+                    {it.details&&<span style={{color:"var(--ink4)"}}>{it.details}</span>}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+      }
+    </div>
+  );
+};
+
+/* ============ SIDEBAR ============ */
+const Side=({pg,go,user,pend,onClose})=>{
+  const isA=user?.role==="admin"||user?.role==="manager";
+  const nav=isA?[
+    {s:"Overview",items:[{id:"a-dash",l:"Dashboard",i:"\u{1F4CA}"}]},
+    {s:"Operations",items:[
+      {id:"a-bk",l:"Bookings",i:"\u{1F4C5}",b:pend||null},
+      {id:"a-inv",l:"Invoices",i:"\u{1F9FE}"},
+      {id:"a-minv",l:"Create Invoice",i:"\u{1F4DD}"},
+      {id:"a-walk",l:"Walk-in",i:"\u{1F6B6}"},
+      {id:"a-fc",l:"Facilities",i:"\u{1F3E2}"},
+      {id:"a-avail",l:"Availability",i:"\u{1F512}"},
+      {id:"a-mt",l:"Maintenance",i:"\u{1F527}"},
+      {id:"a-dc",l:"Discounts",i:"\u{1F3F7}"},
+      {id:"a-us",l:"Users",i:"\u{1F465}"},
+      {id:"a-activity",l:"Activity",i:"\u{1F4CB}"}
+    ]},
+    {s:"Quick",items:[{id:"browse",l:"Browse & Book",i:"\u{1F50D}"}]}
+  ]:[
+    {s:"",items:[
+      {id:"u-dash",l:"My Bookings",i:"\u{1F4C5}"},
+      {id:"browse",l:"Browse",i:"\u{1F50D}"}
+    ]}
+  ];
+
+  return(
+    <nav className="side">
+      <div className="s-hd">
+        <div className="s-ic">R</div>
+        <div><h2>RCEES</h2><small>Facilities</small></div>
+      </div>
+      <div className="s-nav">
+        {nav.map(sec=>(
+          <div key={sec.s}>
+            {sec.s&&<div className="s-lb">{sec.s}</div>}
+            {sec.items.map(it=>(
+              <div key={it.id} className={"s-i"+(pg===it.id?" on":"")} onClick={()=>{go(it.id);if(onClose)onClose()}}>
+                <span className="ic">{it.i}</span>{it.l}{it.b&&<span className="bdg">{it.b}</span>}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="s-ft">
+        <div className="s-i" onClick={()=>{localStorage.removeItem("rcees_auth");window.location.reload()}}>
+          <span className="ic">{"\u{1F6AA}"}</span>Sign Out
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+/* ============ APP ============ */
+const App=()=>{
+  const[pg,sPg]=useState("landing");
+  const[user,sU]=useState(null);
+  const[token,sT]=useState(null);
+  const[toasts,sTs]=useState([]);
+  const[pend,sP]=useState(0);
+  const[mobileOpen,setMobileOpen]=useState(false);
+
+  useEffect(()=>{
+    const s=localStorage.getItem("rcees_auth");
+    if(s){try{const o=JSON.parse(s);sU(o.user);sT(o.token);sPg(o.user.role==="admin"||o.user.role==="manager"?"a-dash":"u-dash")}catch(e){}}
+    const h=window.location.hash;
+    if(h.startsWith("#pay/")){window.__payToken=h.replace("#pay/","");sPg("pay-page")}
+  },[]);
+
+  useEffect(()=>{
+    if(user?.role==="admin"||user?.role==="manager")api("/api/bookings?status=pending&limit=100").then(d=>sP(d.total||0)).catch(()=>{});
+  },[user,pg]);
+
+  const login=(u,t)=>{sU(u);sT(t);localStorage.setItem("rcees_auth",JSON.stringify({user:u,token:t}))};
+  const toast=(msg,type)=>{const id=Date.now()+Math.random();sTs(p=>[...p,{id,msg,type:type||"inf"}]);setTimeout(()=>sTs(p=>p.filter(t=>t.id!==id)),4000)};
+  const go=p=>{sPg(p);setMobileOpen(false)};
+  const ctx={pg,go,user,token,login,toast};
+  const pub=["landing","login","register","browse","detail","guest","pay-page"].includes(pg);
+  const li=!!user;
+
+  const titles={
+    "a-dash":"Dashboard","a-bk":"Bookings","a-inv":"Invoices","a-minv":"Create Invoice",
+    "a-walk":"Walk-in","a-fc":"Facilities","a-avail":"Availability","a-mt":"Maintenance",
+    "a-dc":"Discounts","a-us":"Users","a-activity":"Activity","u-dash":"My Bookings","browse":"Browse"
+  };
+
+  const render=()=>{
+    switch(pg){
+      case "landing":return <Landing/>;
+      case "login":return <Login/>;
+      case "register":return <Register/>;
+      case "browse":return <Browse/>;
+      case "detail":return <Detail/>;
+      case "guest":return <Guest/>;
+      case "u-dash":return <UDash/>;
+      case "a-dash":return <ADash/>;
+      case "a-bk":return <ABk/>;
+      case "a-inv":return <AInv/>;
+      case "a-minv":return <AManualInv/>;
+      case "a-walk":return <AWalk/>;
+      case "a-fc":return <AFc/>;
+      case "a-avail":return <AAvail/>;
+      case "a-mt":return <AMt/>;
+      case "a-dc":return <ADc/>;
+      case "a-us":return <AUs/>;
+      case "a-activity":return <AActivity/>;
+      case "pay-page":return <PayPage/>;
+      default:return <Landing/>;
+    }
+  };
+
+  return(
+    <X.Provider value={ctx}>
+      <Toasts items={toasts} rm={id=>sTs(toasts.filter(t=>t.id!==id))}/>
+      {pub||!li?render():
+        <div className="app">
+          {mobileOpen&&<div className="mobile-overlay show" onClick={()=>setMobileOpen(false)}/>}
+          <div className={mobileOpen?"side open":"side"}>
+            <Side pg={pg} go={go} user={user} pend={pend} onClose={()=>setMobileOpen(false)}/>
+          </div>
+          <div className="mn">
+            <div className="top">
+              <button className="hamburger" onClick={()=>setMobileOpen(!mobileOpen)}>{"\u2630"}</button>
+              <h1>{titles[pg]||"RCEES"}</h1>
+              <div className="sp"/>
+              <div className="upill">
+                <div className="uav">{user.name?.charAt(0)}</div>
+                <span style={{fontWeight:500}}>{user.name}</span>
+                <span className="tg t-ok" style={{marginLeft:2}}>{user.role}</span>
+              </div>
+            </div>
+            <div className="pg">{render()}</div>
+          </div>
+        </div>
+      }
+    </X.Provider>
+  );
+};
+
+ReactDOM.render(<App/>,document.getElementById("root"));
 </script></body></html>

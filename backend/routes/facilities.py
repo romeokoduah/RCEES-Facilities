@@ -161,11 +161,21 @@ async def get_slots(fid: str, date: str):
            AND start_date<=? AND end_date>=? AND blocks_bookings=1""",
         (fid_real, date, date)
     ).fetchall()
+
+    dow = datetime.strptime(date, "%Y-%m-%d").weekday()
+
+    # Check availability rules
+    avail_rules = conn.execute(
+        """SELECT * FROM availability_rules
+           WHERE (facility_id=? OR facility_id IS NULL)
+           AND (date=? OR (rule_type='block_weekday' AND day_of_week=?))""",
+        (fid_real, date, dow)
+    ).fetchall()
+
     conn.close()
 
     booked = [(b["start_time"], b["end_time"]) for b in bookings]
     maint_ranges = [(m["start_time"], m["end_time"]) for m in maint]
-    dow = datetime.strptime(date, "%Y-%m-%d").weekday()
     is_weekend = dow >= 5
     blocked_days = json.loads(fac["blocked_days"] or "[]")
     day_name = datetime.strptime(date, "%Y-%m-%d").strftime("%A").lower()
@@ -178,9 +188,21 @@ async def get_slots(fid: str, date: str):
         if is_blocked:
             status = "blocked"
         else:
-            for ms, me in maint_ranges:
-                if not (e <= ms or s >= me):
-                    status = "maintenance"; break
+            # Check availability rules
+            for rule in avail_rules:
+                r = dict(rule)
+                if r["rule_type"] == "block_date" and r["date"] == date:
+                    if not (e <= r["start_time"] or s >= r["end_time"]):
+                        status = "blocked"
+                        break
+                elif r["rule_type"] == "block_weekday" and r.get("day_of_week") == dow:
+                    if not (e <= r["start_time"] or s >= r["end_time"]):
+                        status = "blocked"
+                        break
+            if status == "available":
+                for ms, me in maint_ranges:
+                    if not (e <= ms or s >= me):
+                        status = "maintenance"; break
             if status == "available":
                 for bs, be in booked:
                     if not (e <= bs or s >= be):
