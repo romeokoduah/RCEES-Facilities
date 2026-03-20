@@ -15,6 +15,9 @@ from .routes.availability import router as availability_router
 from .routes.activity import router as activity_router
 
 def create_app() -> FastAPI:
+    from .database import init_db
+    init_db()
+
     app = FastAPI(title="RCEES Facilities Management System", version="3.5.0")
     app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
     if UPLOAD_DIR.exists():
